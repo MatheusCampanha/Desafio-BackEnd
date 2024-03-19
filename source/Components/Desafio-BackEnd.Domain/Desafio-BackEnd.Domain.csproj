@@ -15,4 +15,8 @@
     <ProjectReference Include="..\Desafio-BackEnd.Domain.Core\Desafio-BackEnd.Domain.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Entregadores\" />
+  </ItemGroup>
+
 </Project>

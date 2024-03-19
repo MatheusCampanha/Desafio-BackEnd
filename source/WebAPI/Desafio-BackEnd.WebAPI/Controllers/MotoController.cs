@@ -1,10 +1,10 @@
 ﻿using Desafio_BackEnd.Domain.Core.Commands;
 using Desafio_BackEnd.Domain.Core.Queries;
-using Desafio_BackEnd.Domain.Moto.Commands;
-using Desafio_BackEnd.Domain.Moto.DTO;
-using Desafio_BackEnd.Domain.Moto.Interfaces.Handlers;
-using Desafio_BackEnd.Domain.Moto.Interfaces.Repositories;
-using Desafio_BackEnd.Domain.Moto.Queries;
+using Desafio_BackEnd.Domain.Motos.Commands;
+using Desafio_BackEnd.Domain.Motos.DTO;
+using Desafio_BackEnd.Domain.Motos.Interfaces.Handlers;
+using Desafio_BackEnd.Domain.Motos.Interfaces.Repositories;
+using Desafio_BackEnd.Domain.Motos.Queries;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 

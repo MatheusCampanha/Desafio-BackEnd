@@ -1,6 +1,6 @@
 ﻿using Desafio_BackEnd.Domain.Core.Entities;
 
-namespace Desafio_BackEnd.Domain.Moto
+namespace Desafio_BackEnd.Domain.Motos
 {
     public class Moto : Entity
     {

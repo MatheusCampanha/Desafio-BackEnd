@@ -1,12 +1,12 @@
 ﻿using Desafio_BackEnd.Domain.Core.Commands;
 using Desafio_BackEnd.Domain.Core.Results;
-using Desafio_BackEnd.Domain.Moto.Commands;
-using Desafio_BackEnd.Domain.Moto.DTO;
-using Desafio_BackEnd.Domain.Moto.Interfaces.Handlers;
-using Desafio_BackEnd.Domain.Moto.Interfaces.Repositories;
+using Desafio_BackEnd.Domain.Motos.Commands;
+using Desafio_BackEnd.Domain.Motos.DTO;
+using Desafio_BackEnd.Domain.Motos.Interfaces.Handlers;
+using Desafio_BackEnd.Domain.Motos.Interfaces.Repositories;
 using System.Net;
 
-namespace Desafio_BackEnd.Domain.Moto.Handlers
+namespace Desafio_BackEnd.Domain.Motos.Handlers
 {
     public class MotoHandler(IMotoRepository motoRepository) : IMotoHandler
     {

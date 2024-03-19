@@ -1,9 +1,9 @@
 ﻿using Desafio_BackEnd.Domain.Core.Commands;
 using Desafio_BackEnd.Domain.Core.Results;
-using Desafio_BackEnd.Domain.Moto.DTO;
-using Desafio_BackEnd.Domain.Moto.Queries;
+using Desafio_BackEnd.Domain.Motos.DTO;
+using Desafio_BackEnd.Domain.Motos.Queries;
 
-namespace Desafio_BackEnd.Domain.Moto.Interfaces.Repositories
+namespace Desafio_BackEnd.Domain.Motos.Interfaces.Repositories
 {
     public interface IMotoRepository
     {

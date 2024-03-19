@@ -1,6 +1,6 @@
 ﻿using Desafio_BackEnd.Domain.Core.Queries;
 
-namespace Desafio_BackEnd.Domain.Moto.Queries
+namespace Desafio_BackEnd.Domain.Motos.Queries
 {
     public class GetMotoQuery : Query
     {

@@ -1,7 +1,7 @@
 ﻿using Desafio_BackEnd.Domain.Core.Commands;
 using System.Text.Json.Serialization;
 
-namespace Desafio_BackEnd.Domain.Moto.Commands
+namespace Desafio_BackEnd.Domain.Motos.Commands
 {
     public class UpdatePlacaCommand(string placa) : Command
     {

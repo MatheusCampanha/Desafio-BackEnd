@@ -1,10 +1,10 @@
 ﻿using Desafio_BackEnd.Domain.Core.Commands;
 using Desafio_BackEnd.Domain.Core.Data;
 using Desafio_BackEnd.Domain.Core.Results;
-using Desafio_BackEnd.Domain.Moto;
-using Desafio_BackEnd.Domain.Moto.DTO;
-using Desafio_BackEnd.Domain.Moto.Interfaces.Repositories;
-using Desafio_BackEnd.Domain.Moto.Queries;
+using Desafio_BackEnd.Domain.Motos;
+using Desafio_BackEnd.Domain.Motos.DTO;
+using Desafio_BackEnd.Domain.Motos.Interfaces.Repositories;
+using Desafio_BackEnd.Domain.Motos.Queries;
 using MongoDB.Driver;
 using System.Net;
 
@@ -13,11 +13,9 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
     public class MotoRepository : IMotoRepository
     {
         private readonly IMongoCollection<MotoDTO> _motos;
-        private readonly Settings _settings;
 
         public MotoRepository(Settings settings)
         {
-            _settings = settings;
             var client = new MongoClient(settings.ConnectionStrings.DBApplication);
             var database = client.GetDatabase(settings.ConnectionStrings.DatabaseName);
             _motos = database.GetCollection<MotoDTO>("Moto");

@@ -1,6 +1,6 @@
-﻿using Desafio_BackEnd.Domain.Moto.Handlers;
-using Desafio_BackEnd.Domain.Moto.Interfaces.Handlers;
-using Desafio_BackEnd.Domain.Moto.Interfaces.Repositories;
+﻿using Desafio_BackEnd.Domain.Motos.Handlers;
+using Desafio_BackEnd.Domain.Motos.Interfaces.Handlers;
+using Desafio_BackEnd.Domain.Motos.Interfaces.Repositories;
 using Desafio_BackEnd.Infra.Data.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
