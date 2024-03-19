@@ -13,5 +13,6 @@
     public class ConnectionStrings
     {
         public string DBApplication { get; set; } = default!;
+        public string DatabaseName { get; set; } = default!;
     }
 }

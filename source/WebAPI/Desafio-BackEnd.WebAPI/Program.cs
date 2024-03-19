@@ -10,14 +10,11 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 #region Injecao de Dependecia
-
 var settings = builder.Configuration.GetSection("Settings").Get<Settings>();
-builder.Services.AddSingleton(settings!);
+builder.Services.AddSingleton(settings);
 builder.Services.AddServices();
-
-#endregion Injecao de Dependecia
+#endregion
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
@@ -30,7 +27,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerSetup(settings!.ApplicationName);
+builder.Services.AddSwaggerSetup(settings.ApplicationName);
 
 builder.Services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Optimal);
 builder.Services.AddResponseCompression(options => { options.Providers.Add<GzipCompressionProvider>(); });

@@ -17,7 +17,7 @@ namespace Desafio_BackEnd.Domain.Core.Queries
             TotalRegistros = Registros.Count;
         }
 
-        public QueryResult(int paginaAtual, int registrosPorPagina, int totalRegistros, ICollection<T> registros)
+        public QueryResult(int paginaAtual, int registrosPorPagina, long totalRegistros, ICollection<T> registros)
         {
             PaginaAtual = paginaAtual;
             RegistrosPorPagina = registrosPorPagina;

@@ -26,7 +26,7 @@ namespace Desafio_BackEnd.Domain.Core.Results
             }
         }
 
-        public Result(int statusCode, int paginaAtual, int registrosPorPagina, int totalRegistros, ICollection<T> registros)
+        public Result(int statusCode, int paginaAtual, int registrosPorPagina, long totalRegistros, ICollection<T> registros)
         {
             StatusCode = statusCode;
 
