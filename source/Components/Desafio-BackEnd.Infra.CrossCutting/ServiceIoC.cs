@@ -1,4 +1,5 @@
-﻿using Desafio_BackEnd.Domain.Entregadores.Handlers;
+﻿using Amazon.S3;
+using Desafio_BackEnd.Domain.Entregadores.Handlers;
 using Desafio_BackEnd.Domain.Entregadores.Interfaces.Handlers;
 using Desafio_BackEnd.Domain.Entregadores.Interfaces.Repositories;
 using Desafio_BackEnd.Domain.Motos.Handlers;
@@ -16,6 +17,7 @@ namespace Desafio_BackEnd.Infra.CrossCutting
         {
             #region Helpers
 
+            services.AddAWSService<IAmazonS3>();
             services.AddScoped<IS3Helper, S3Helper>();
 
             #endregion Helpers

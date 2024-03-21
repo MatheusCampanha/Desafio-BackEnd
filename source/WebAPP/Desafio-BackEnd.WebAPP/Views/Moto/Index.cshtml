@@ -1,0 +1,146 @@
+﻿@{
+    ViewData["Title"] = "Motos";
+}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Motos</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Adicione seus estilos CSS aqui -->
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Lista de Motos</h1>
+
+    <input type="text" id="inputPlaca" placeholder="Digite a placa...">
+    <button id="btnSearch">Buscar</button>
+
+    <button id="btnNew">Nova</button>
+
+    <table id="tableMotos">
+        <thead>
+            <tr>
+                <th style="display: none;">Id</th>
+                <th>Ano</th>
+                <th>Modelo</th>
+                <th>Placa</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+
+    <script>
+        const baseUrl = 'https://localhost:7150';
+        $(document).ready(function () {
+            getMotos();
+        });
+        
+        async function getMotos(placa) {
+            var endpoint = '/motos';
+            if (placa && placa !== '')
+                endpoint += '?placa=' + placa;
+
+            var tableBody = $('#tableBody');
+            tableBody.empty();
+
+            let result;
+            try {
+                result = await $.ajax({
+                    url: baseUrl + endpoint,
+                    type: 'GET',
+                    dataType: 'json',
+                    headers: {
+                        'Token': 'Dk3o5TK6c8DjpQHYB@UvrBi0BI&B&4UH'
+                    }
+                });
+
+                var motos = result.Registros;
+
+                $.each(motos, function (index, moto) {
+                    var row = $('<tr>');
+                    row.append($('<td>').text(moto.Id).css('display', 'none'));
+                    row.append($('<td>').text(moto.Ano));
+                    row.append($('<td>').text(moto.Modelo));
+                    row.append($('<td>').text(moto.Placa));
+                    var actions = $('<td>');
+                    actions.append($('<button>').text('Editar').click(function () {
+                        window.location.href = '@Url.Action("Edit","Moto")' + '?id=' + moto.Id + '&placa=' + moto.Placa;
+                    }));
+                    actions.append($('<button>').text('Deletar').click(function () {
+                        deleteMoto(moto.Id);
+                    }));
+                    row.append(actions);
+                    tableBody.append(row);
+                });
+            } 
+            catch (error) {
+                if (error.status === 422)
+                    alert('Nenhuma Moto Encontrada');
+                else {
+                    var errorMessages = error.responseJSON.Notifications;
+
+                    $.each(errorMessages, function (index, errorMsg) {
+                        console.log(errorMsg.Message);
+                    });
+                }
+            }
+        }
+
+        async function deleteMoto(id){
+            var endpoint = '/motos/' + id;
+
+            try {
+                await $.ajax({
+                    url: baseUrl + endpoint,
+                    type: 'DELETE',
+                    dataType: 'json',
+                    headers: {
+                        'Token': 'Dk3o5TK6c8DjpQHYB@UvrBi0BI&B&4UH'
+                    }
+                });
+
+                await getMotos();
+            }
+            catch (error) {
+                var errorMessages = error.responseJSON.Notifications;
+
+                $.each(errorMessages, function (index, errorMsg) {
+                    console.log(errorMsg.Message);
+                });
+            }
+        }
+
+        $('#btnNew').click(function () {
+            window.location.href = '@Url.Action("Create", "Moto")'
+        });
+
+        $('#btnSearch').click(function () {
+            var placa = $('#inputPlaca').val();
+            getMotos(placa);
+        });
+    </script>
+
+</body>

@@ -1,0 +1,97 @@
+﻿@{
+    ViewData["Title"] = "Nova Moto";
+}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Nova Moto</title>
+</head>
+<body>
+    <h1>Cadastrar Nova Moto</h1>
+
+    <div>
+        <label for="ano">Ano:</label>
+        <input type="number" id="ano" name="ano">
+    </div>
+    <div>
+        <label for="modelo">Modelo:</label>
+        <input type="text" id="modelo" name="modelo">
+    </div>
+    <div>
+        <label for="placa">Placa:</label>
+        <input type="text" id="placa" name="placa">
+    </div>
+    <button id="btnCadastrar">Cadastrar</button>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            const baseUrl = 'https://localhost:7150';
+
+            $('#btnCadastrar').click(async function () {
+
+                if (!validate())
+                    return;
+
+                var insertMotoCommand = {
+                    Ano: parseInt($('#ano').val()),
+                    Modelo: $('#modelo').val(),
+                    Placa: $('#placa').val()
+                }
+
+                try {
+                    var endpoint = '/motos';
+
+                    await $.ajax({ 
+                        url: baseUrl + endpoint,
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(insertMotoCommand),
+                        headers: {
+                            'Token': 'Dk3o5TK6c8DjpQHYB@UvrBi0BI&B&4UH'
+                        }
+                    });
+
+                    alert('Moto Cadastrada com Sucesso!');
+                    window.location.href = '@Url.Action("Index", "Moto")'
+                }
+                catch (error) {
+                    var errorMessages = error.responseJSON.Notifications;
+
+                    $.each(errorMessages, function (index, errorMsg) {
+                        if (errorMsg.Message == 'Duplicada')
+                            alert('Placa já cadastrada no sistema');
+                        else
+                            alert(errorMsg);
+                    });
+                }
+            });
+
+            function validate() {
+                var ano = $('#ano').val();
+                var modelo = $('#modelo').val();
+                var placa = $('#placa').val();
+
+                if (!ano || isNaN(ano) || ano.length !== 4 || parseInt(ano) < 1900 || parseInt(ano) > new Date().getFullYear()) {
+                    alert('Ano inválido. Por favor, insira um ano válido.');
+                    return false;
+                }
+
+                if (!modelo) {
+                    alert('Modelo não pode ser nulo ou vazio.');
+                    return false;
+                }
+
+                if (!placa) {
+                    alert('Placa não pode ser nula ou vazia.');
+                    return false;
+                }
+
+                return true;
+            }
+        });
+    </script>
+</body>
+</html>

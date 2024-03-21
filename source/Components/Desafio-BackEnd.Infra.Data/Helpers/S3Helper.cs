@@ -4,9 +4,14 @@ using System.Net;
 
 namespace Desafio_BackEnd.Infra.Data.Helpers
 {
-    public class S3Helper(IAmazonS3 s3Client) : IS3Helper
+    public class S3Helper : IS3Helper
     {
-        private readonly IAmazonS3 _s3Client = s3Client;
+        private readonly IAmazonS3 _s3Client;
+
+        public S3Helper(IAmazonS3 s3Client)
+        {
+            _s3Client = s3Client;
+        }
 
         public async Task Download(string bucketName, string key, Stream outputStream)
         {
