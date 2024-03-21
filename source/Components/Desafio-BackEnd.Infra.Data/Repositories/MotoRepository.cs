@@ -23,7 +23,7 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
 
         public async Task<Result<Moto>> GetById(string id)
         {
-            var result = await _motos.Find(c => c.Id.Equals(id)).FirstOrDefaultAsync();
+            var result = await _motos.Find(x => x.Id.Equals(id)).FirstOrDefaultAsync();
 
             if (result != null)
             {
@@ -36,7 +36,7 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
 
         public async Task<Result<MotoDTO>> GetByIdResult(string id)
         {
-            var moto = await _motos.Find(c => c.Id == id).FirstOrDefaultAsync();
+            var moto = await _motos.Find(x => x.Id == id).FirstOrDefaultAsync();
 
             if (moto != null)
                 return new Result<MotoDTO>(HttpStatusCode.OK.GetHashCode(), moto);
@@ -46,7 +46,7 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
 
         public async Task<Result<MotoDTO>> GetResult(string placa)
         {
-            var moto = await _motos.Find(c => c.Placa == placa).FirstOrDefaultAsync();
+            var moto = await _motos.Find(x => x.Placa == placa).FirstOrDefaultAsync();
 
             if (moto != null)
                 return new Result<MotoDTO>(HttpStatusCode.OK.GetHashCode(), moto);
@@ -61,17 +61,8 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
             var filter = filterBuilder.Empty; // Filtro inicial vazio
 
             // Construa o filtro com base nos parâmetros de consulta
-            if (!string.IsNullOrEmpty(query.Id))
-                filter &= filterBuilder.Eq(c => c.Id, query.Id);
-
-            if (query.Ano.HasValue)
-                filter &= filterBuilder.Eq(c => c.Ano, query.Ano);
-
-            if (!string.IsNullOrEmpty(query.Modelo))
-                filter &= filterBuilder.Eq(c => c.Modelo, query.Modelo);
-
             if (!string.IsNullOrEmpty(query.Placa))
-                filter &= filterBuilder.Eq(c => c.Placa, query.Placa);
+                filter &= filterBuilder.Eq(x => x.Placa, query.Placa);
 
             var totalRegistros = await _motos.CountDocumentsAsync(filter);
 
@@ -98,7 +89,7 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
 
         public async Task<CommandResult> Update(MotoDTO moto)
         {
-            var result = await _motos.ReplaceOneAsync(c => c.Id == moto.Id, moto);
+            var result = await _motos.ReplaceOneAsync(x => x.Id == moto.Id, moto);
 
             if (result.ModifiedCount > 0)
                 return new CommandResult(HttpStatusCode.NoContent.GetHashCode());
@@ -108,9 +99,9 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
 
         public async Task<CommandResult> Delete(string id)
         {
-            var resultado = await _motos.DeleteOneAsync(c => c.Id.Equals(id));
+            var result = await _motos.DeleteOneAsync(x => x.Id.Equals(id));
 
-            if (resultado.DeletedCount > 0)
+            if (result.DeletedCount > 0)
                 return new CommandResult(HttpStatusCode.NoContent.GetHashCode());
             else
                 return new CommandResult(HttpStatusCode.NotFound.GetHashCode());

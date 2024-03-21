@@ -6,7 +6,7 @@ namespace Desafio_BackEnd.Domain.Motos.DTO
     public record MotoDTO
     {
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; init; } = default!;
+        public string Id { get; init; }
         public int Ano { get; init; }
         public string Modelo { get; init; }
         public string Placa { get; init; }

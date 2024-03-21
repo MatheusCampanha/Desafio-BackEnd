@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AWSSDK.S3" Version="3.7.307" />
     <PackageReference Include="MongoDB.Driver" Version="2.24.0" />
   </ItemGroup>
 
