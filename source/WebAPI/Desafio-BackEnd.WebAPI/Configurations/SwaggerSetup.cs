@@ -1,5 +1,4 @@
 ﻿using Desafio_BackEnd.WebAPI.Configurations.Swagger.Filters;
-using Desafio_BackEnd.WebAPI.Configurations.Swagger.HeaderParameters;
 using Microsoft.OpenApi.Models;
 
 namespace Desafio_BackEnd.WebAPI.Configurations
@@ -14,9 +13,22 @@ namespace Desafio_BackEnd.WebAPI.Configurations
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Version = "v1", Title = applicationName });
 
-                c.OperationFilter<AuthenticationHeaderParameter>();
-
                 c.OperationFilter<NotifiablePropertyFilter>();
+
+                var securityScheme = new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Description = "Insira o token JWT desta maneira: Bearer {seu token}",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "Bearer"
+                };
+                c.AddSecurityDefinition("Bearer", securityScheme);
+                var securityRequirement = new OpenApiSecurityRequirement
+                {
+                    { securityScheme, new[] { "Bearer" } }
+                };
+                c.AddSecurityRequirement(securityRequirement);
             });
         }
 

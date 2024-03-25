@@ -5,7 +5,11 @@ using Desafio_BackEnd.Domain.Entregadores.Interfaces.Repositories;
 using Desafio_BackEnd.Domain.Motos.Handlers;
 using Desafio_BackEnd.Domain.Motos.Interfaces.Handlers;
 using Desafio_BackEnd.Domain.Motos.Interfaces.Repositories;
+using Desafio_BackEnd.Domain.Users.Handlers;
+using Desafio_BackEnd.Domain.Users.Interfaces.Handlers;
+using Desafio_BackEnd.Domain.Users.Interfaces.Repositories;
 using Desafio_BackEnd.Infra.Data.Helpers;
+using Desafio_BackEnd.Infra.Data.Helpers.Jwt;
 using Desafio_BackEnd.Infra.Data.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,6 +21,8 @@ namespace Desafio_BackEnd.Infra.CrossCutting
         {
             #region Helpers
 
+            services.AddScoped<IJwtHelper, JwtHelper>();
+
             services.AddAWSService<IAmazonS3>();
             services.AddScoped<IS3Helper, S3Helper>();
 
@@ -26,6 +32,7 @@ namespace Desafio_BackEnd.Infra.CrossCutting
 
             services.AddScoped<IEntregadorHandler, EntregadorHandler>();
             services.AddScoped<IMotoHandler, MotoHandler>();
+            services.AddScoped<IUserHandler, UserHandler>();
 
             #endregion Handlers
 
@@ -33,6 +40,7 @@ namespace Desafio_BackEnd.Infra.CrossCutting
 
             services.AddScoped<IEntregadorRepository, EntregadorRepository>();
             services.AddScoped<IMotoRepository, MotoRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             #endregion Repositories
 

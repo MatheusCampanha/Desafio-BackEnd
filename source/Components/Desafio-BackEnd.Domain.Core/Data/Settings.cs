@@ -8,6 +8,7 @@
         public string Token { get; set; } = default!;
 
         public ConnectionStrings ConnectionStrings { get; set; } = default!;
+        public Jwt Jwt { get; set; } = default!;
         public S3Settings S3Settings { get; set; } = default!;
     }
 
@@ -15,6 +16,13 @@
     {
         public string DBApplication { get; set; } = default!;
         public string DatabaseName { get; set; } = default!;
+    }
+
+    public class Jwt
+    {
+        public string SecretKey { get; set; } = default!;
+        public string Issuer { get; set; } = default!;
+        public string Audience { get; set; } = default!;
     }
 
     public class S3Settings

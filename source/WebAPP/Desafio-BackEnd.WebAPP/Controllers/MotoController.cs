@@ -1,10 +1,13 @@
-﻿using Desafio_BackEnd.WebAPP.Models.Moto;
+﻿using Desafio_BackEnd.WebAPP.Interfaces;
+using Desafio_BackEnd.WebAPP.Models.Moto;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Desafio_BackEnd.WebAPP.Controllers
 {
-    public class MotoController : Controller
+    public class MotoController(IMotoRepository motoRepository) : Controller
     {
+        private readonly IMotoRepository _motoRepository = motoRepository;
+
         public IActionResult Index()
         {
             return View();

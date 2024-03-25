@@ -39,7 +39,7 @@ namespace Desafio_BackEnd.WebAPI.Controllers
         [HttpPost]
         [Route("motos")]
         [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(MotoDTO))]
-        public async Task<IActionResult> Post(InsertMotoCommand command)
+        public async Task<IActionResult> Post([FromBody]InsertMotoCommand command)
         {
             var result = await _motoHandler.Handle(command);
             return ResultFirst(result);
