@@ -1,7 +1,6 @@
 ﻿using Desafio_BackEnd.Domain.Core.Commands;
 using Desafio_BackEnd.Domain.Core.Results;
 using Desafio_BackEnd.Domain.Motos.DTO;
-using Desafio_BackEnd.Domain.Motos.Queries;
 
 namespace Desafio_BackEnd.Domain.Motos.Interfaces.Repositories
 {
@@ -9,11 +8,7 @@ namespace Desafio_BackEnd.Domain.Motos.Interfaces.Repositories
     {
         Task<Result<Moto>> GetById(string id);
 
-        Task<Result<MotoDTO>> GetByIdResult(string id);
-
-        Task<Result<MotoDTO>> GetResult(string placa);
-
-        Task<Result<MotoDTO>> GetResult(GetMotoQuery query);
+        Task<List<MotoDTO>> GetResult(string? placa);
 
         Task<Result<MotoDTO>> Insert(MotoDTO moto);
 

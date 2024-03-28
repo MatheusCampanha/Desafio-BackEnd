@@ -1,6 +1,6 @@
-﻿namespace Desafio_BackEnd.Domain.Users
+﻿namespace Desafio_BackEnd.WebAPP.Models.User
 {
-    public class UserLogin
+    public class UserLoginViewModel
     {
         public string Username { get; set; } = default!;
         public string Password { get; set; } = default!;

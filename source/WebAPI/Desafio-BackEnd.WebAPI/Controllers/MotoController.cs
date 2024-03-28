@@ -1,10 +1,9 @@
-﻿using Desafio_BackEnd.Domain.Core.Commands;
-using Desafio_BackEnd.Domain.Core.Queries;
+﻿using Desafio_BackEnd.Domain.Core.Queries;
 using Desafio_BackEnd.Domain.Motos.Commands;
 using Desafio_BackEnd.Domain.Motos.DTO;
 using Desafio_BackEnd.Domain.Motos.Interfaces.Handlers;
 using Desafio_BackEnd.Domain.Motos.Interfaces.Repositories;
-using Desafio_BackEnd.Domain.Motos.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -12,46 +11,32 @@ namespace Desafio_BackEnd.WebAPI.Controllers
 {
     [Route("")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class MotoController(IMotoHandler motoHandler, IMotoRepository motoRepository) : BaseController
     {
         private readonly IMotoHandler _motoHandler = motoHandler;
         private readonly IMotoRepository _motoRepository = motoRepository;
 
         [HttpGet]
-        [Route("motos/{id}")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(MotoDTO))]
-        public async Task<IActionResult> Get(string id)
-        {
-            return ResultFirst(await _motoRepository.GetByIdResult(id));
-        }
-
-        [HttpGet]
         [Route("motos")]
         [ProducesResponseType((int)HttpStatusCode.PartialContent, Type = typeof(QueryResult<MotoDTO>))]
-        public async Task<IActionResult> GetAll([FromQuery] GetMotoQuery query)
+        public async Task<IActionResult> GetAll(string? placa)
         {
-            if (!query.IsValid())
-                return Result(new CommandResult(422, query));
+            var result = await _motoRepository.GetResult(placa);
 
-            return Result(await _motoRepository.GetResult(query));
+            if (result.Count > 0)
+                return Ok(result);
+            else
+                return NotFound();
         }
 
         [HttpPost]
         [Route("motos")]
         [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(MotoDTO))]
-        public async Task<IActionResult> Post([FromBody]InsertMotoCommand command)
+        public async Task<IActionResult> Post([FromBody] InsertMotoCommand command)
         {
             var result = await _motoHandler.Handle(command);
             return ResultFirst(result);
-        }
-
-        [HttpPut]
-        [Route("motos/{id}")]
-        public async Task<IActionResult> Put(string id, [FromBody] UpdateMotoCommand command)
-        {
-            command.AlterId(id);
-            var result = await _motoHandler.Handle(command);
-            return Result(result);
         }
 
         [HttpPatch]

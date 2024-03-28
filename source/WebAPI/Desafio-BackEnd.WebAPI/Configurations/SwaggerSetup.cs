@@ -15,20 +15,30 @@ namespace Desafio_BackEnd.WebAPI.Configurations
 
                 c.OperationFilter<NotifiablePropertyFilter>();
 
-                var securityScheme = new OpenApiSecurityScheme
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
                     Name = "Authorization",
-                    Description = "Insira o token JWT desta maneira: Bearer {seu token}",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.Http,
-                    Scheme = "Bearer"
-                };
-                c.AddSecurityDefinition("Bearer", securityScheme);
-                var securityRequirement = new OpenApiSecurityRequirement
+                    Scheme = "bearer",
+                    BearerFormat = "JWT"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
-                    { securityScheme, new[] { "Bearer" } }
-                };
-                c.AddSecurityRequirement(securityRequirement);
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] { }
+                    }
+                });
             });
         }
 

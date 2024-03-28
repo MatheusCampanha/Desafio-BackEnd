@@ -1,22 +1,23 @@
-﻿using Desafio_BackEnd.Domain.Motos.DTO;
-using Desafio_BackEnd.Domain.Motos.Queries;
-using Desafio_BackEnd.WebAPP.Interfaces;
-using Microsoft.AspNetCore.Mvc;
+﻿using Desafio_BackEnd.WebAPP.Interfaces;
+using Desafio_BackEnd.WebAPP.Models.Moto;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
+using System.Numerics;
 
 namespace Desafio_BackEnd.WebAPP.Repositories
 {
     public class MotoRepository(IConfiguration configuration) : IMotoRepository
     {
-        private readonly string _baseURL = configuration["Services.UrlAPI"];
+        private readonly string _baseURL = configuration["Services:UrlAPI"];
 
-        public async Task<MotoDTO> GetAll([FromQuery] GetMotoQuery query, string token)
+        public async Task<List<MotoViewModel>> GetAll(string placa, string token)
         {
             using var httpClient = new HttpClient();
             List<string> param = [];
 
-            if (!string.IsNullOrEmpty(query.Placa))
-                param.Add($"Placa={query.Placa}");
+            if (!string.IsNullOrEmpty(placa))
+                param.Add($"Placa={placa}");
 
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
@@ -24,9 +25,83 @@ namespace Desafio_BackEnd.WebAPP.Repositories
 
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadFromJsonAsync<MotoDTO>();
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<List<MotoViewModel>>(json)!;
+            }
+            else if(response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return [];
             }
             else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                var errorMessage = $"Status code: {response.StatusCode}, Error: {errorContent}";
+
+                throw new ApplicationException(errorMessage);
+            }
+        }
+
+        public async Task DeleteMoto(string id, string token)
+        {
+            using var httpClient = new HttpClient();
+
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await httpClient.DeleteAsync($"{_baseURL}/motos/{id}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                var errorMessage = $"Status code: {response.StatusCode}, Error: {errorContent}";
+
+                throw new ApplicationException(errorMessage);
+            }
+        }
+
+        public async Task SaveEdit(EditMotoViewModel model, string token)
+        {
+            using var httpClient = new HttpClient();
+
+            var command = new
+            {
+                model.Placa
+            };
+
+            var json = System.Text.Json.JsonSerializer.Serialize(command);
+            var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await httpClient.PatchAsync($"{_baseURL}/motos/{model.Id}/placa", content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                var errorMessage = $"Status code: {response.StatusCode}, Error: {errorContent}";
+
+                throw new ApplicationException(errorMessage);
+            }
+        }
+
+        public async Task SaveNew(CreateMotoViewModel model, string token)
+        {
+            using var httpClient = new HttpClient();
+            
+            var command = new
+            {
+                model.Ano,
+                model.Modelo,
+                model.Placa
+            };
+
+            var json = System.Text.Json.JsonSerializer.Serialize(command);
+            var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await httpClient.PostAsync($"{_baseURL}/motos/", content);
+
+            if (!response.IsSuccessStatusCode)
             {
                 var errorContent = await response.Content.ReadAsStringAsync();
                 var errorMessage = $"Status code: {response.StatusCode}, Error: {errorContent}";

@@ -22,8 +22,8 @@ namespace Desafio_BackEnd.Domain.Motos.Handlers
                 return errorResult;
             }
 
-            var uniqueResult = await _motoRepository.GetResult(command.Placa);
-            if (uniqueResult.StatusCode == HttpStatusCode.OK.GetHashCode())
+            var uniquePlaca = await _motoRepository.GetResult(command.Placa);
+            if (uniquePlaca.Count != 0)
             {
                 errorResult.AddNotification(nameof(command.Placa), "Duplicada");
                 return errorResult;
@@ -39,46 +39,6 @@ namespace Desafio_BackEnd.Domain.Motos.Handlers
 
             var motoDTO = new MotoDTO(moto);
             return await _motoRepository.Insert(motoDTO);
-        }
-
-        public async Task<CommandResult> Handle(UpdateMotoCommand command)
-        {
-            var errorResult = new CommandResult(HttpStatusCode.UnprocessableEntity.GetHashCode());
-
-            if (!command.IsValid())
-            {
-                errorResult.AddNotifications(command);
-                return errorResult;
-            }
-
-            var motoResult = await _motoRepository.GetById(command.Id);
-            if (motoResult.StatusCode != HttpStatusCode.OK.GetHashCode())
-            {
-                errorResult.AddNotifications(motoResult);
-                return errorResult;
-            }
-            var moto = motoResult.QueryResult.Registros.First();
-
-            var uniqueResult = await _motoRepository.GetResult(command.Placa);
-            var unique = uniqueResult.QueryResult?.Registros?.First();
-            if (uniqueResult.StatusCode == HttpStatusCode.OK.GetHashCode() && unique != null && unique.Id.Equals(command.Id))
-            {
-                errorResult.AddNotification(nameof(command.Placa), "Duplicada");
-                return errorResult;
-            }
-
-            moto.SetAno(command.Ano);
-            moto.SetModelo(command.Modelo);
-            moto.SetPlaca(command.Placa);
-
-            if (moto.Invalid)
-            {
-                errorResult.AddNotifications(moto);
-                return errorResult;
-            }
-
-            var motoDTO = new MotoDTO(moto);
-            return await _motoRepository.Update(motoDTO);
         }
 
         public async Task<CommandResult> Handle(UpdatePlacaCommand command)
@@ -99,9 +59,9 @@ namespace Desafio_BackEnd.Domain.Motos.Handlers
             }
             var moto = motoResult.QueryResult.Registros.First();
 
-            var uniqueResult = await _motoRepository.GetResult(command.Placa);
-            var unique = uniqueResult.QueryResult?.Registros?.First();
-            if (uniqueResult.StatusCode == HttpStatusCode.OK.GetHashCode() && unique != null && unique.Id.Equals(command.Id))
+            var uniquePlaca = await _motoRepository.GetResult(command.Placa);
+            var unique = uniquePlaca.FirstOrDefault();
+            if (uniquePlaca.Count != 0 && unique != null && unique.Id.Equals(command.Id))
             {
                 errorResult.AddNotification(nameof(command.Placa), "Duplicada");
                 return errorResult;

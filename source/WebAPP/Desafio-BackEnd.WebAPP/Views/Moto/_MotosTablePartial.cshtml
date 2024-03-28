@@ -1,0 +1,40 @@
+﻿@using Desafio_BackEnd.WebAPP.Models.Moto
+@model List<MotoViewModel>
+
+@if (Model != null && Model.Count > 0)
+{
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th style="display:none;">Id</th>
+                <th>Ano</th>
+                <th>Modelo</th>
+                <th>Placa</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var moto in Model)
+            {
+                <tr>
+                    <td style="display:none;">@moto.Id</td>
+                    <td>@moto.Ano</td>
+                    <td>@moto.Modelo</td>
+                    <td>@moto.Placa</td>
+                    <td>
+                        @Html.ActionLink("Editar", "Edit", new { id = moto.Id, placa = moto.Placa }, new { @class = "btn btn-primary" })
+                        <button class="btn btn-danger" onclick="deleteMoto('@moto.Id')">Excluir</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h3>Nenhuma moto encontrada...</h3>
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    
+</script>

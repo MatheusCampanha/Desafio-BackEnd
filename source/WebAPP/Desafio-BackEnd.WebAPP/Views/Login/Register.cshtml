@@ -1,0 +1,28 @@
+﻿@using Desafio_BackEnd.WebAPP.Models.User
+<!-- Views/Usuario/Novo.cshtml -->
+@model RegisterUserViewModel
+
+<h2>Criar Novo Usuário</h2>
+
+<form method="post" action="/Login/Register">
+    <div class="form-group">
+        <label for="usuario">Usuário:</label>
+        <input type="text" class="form-control" id="username" name="Username" required>
+    </div>
+    <div class="form-group">
+        <label for="senha">Senha:</label>
+        <input type="password" class="form-control" id="password" name="Password" required>
+    </div>
+    <div class="form-group">
+        <label for="perfil">Perfil:</label>
+        <select class="form-control" id="role" name="Role" required>
+            <option value="Admin">Admin</option>
+            <option value="Entregador">Entregador</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Criar Usuário</button>
+</form>
+@if (!string.IsNullOrEmpty(@Context.Request.Query["error"]))
+{
+    <div class="alert alert-danger">@Context.Request.Query["error"]</div>
+}

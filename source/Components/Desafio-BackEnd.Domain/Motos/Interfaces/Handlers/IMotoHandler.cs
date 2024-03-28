@@ -9,8 +9,6 @@ namespace Desafio_BackEnd.Domain.Motos.Interfaces.Handlers
     {
         Task<Result<MotoDTO>> Handle(InsertMotoCommand command);
 
-        Task<CommandResult> Handle(UpdateMotoCommand command);
-
         Task<CommandResult> Handle(UpdatePlacaCommand command);
 
         Task<CommandResult> Handle(string id);

@@ -1,6 +1,8 @@
 ﻿using Desafio_BackEnd.WebAPP.Interfaces;
 using Desafio_BackEnd.WebAPP.Models.Moto;
 using Microsoft.AspNetCore.Mvc;
+using System.Numerics;
+using System.Reflection;
 
 namespace Desafio_BackEnd.WebAPP.Controllers
 {
@@ -18,15 +20,67 @@ namespace Desafio_BackEnd.WebAPP.Controllers
             return View();
         }
 
-        public IActionResult Edit(string id, string placa)
+        [HttpGet]
+        public async Task<ActionResult> GetMotos(string? placa)
         {
-            var model = new EditarMotoViewModel
+            var token = HttpContext.Session.GetString("JWTToken");
+            if (!string.IsNullOrEmpty(token))
+            {
+                List<MotoViewModel> result = await _motoRepository.GetAll(placa, token);
+                return PartialView("_MotosTablePartial", result);
+            }
+
+            return BadRequest("Token inválido");
+        }
+
+        public ActionResult Edit(string id, string placa)
+        {
+            var model = new EditMotoViewModel
             {
                 Id = id,
                 Placa = placa
             };
 
-            return View(model);
+            return View("Edit", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveEdit([FromBody] EditMotoViewModel model)
+        {
+            var token = HttpContext.Session.GetString("JWTToken");
+            if (!string.IsNullOrEmpty(token))
+            {
+                await _motoRepository.SaveEdit(model, token);
+                return View("Index");
+            }
+
+            return BadRequest("Token inválido");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveNew([FromBody] CreateMotoViewModel model)
+        {
+            var token = HttpContext.Session.GetString("JWTToken");
+            if (!string.IsNullOrEmpty(token))
+            {
+                await _motoRepository.SaveNew(model, token);
+                return View("Index");
+            }
+
+            return BadRequest("Token inválido");
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var token = HttpContext.Session.GetString("JWTToken");
+            if (!string.IsNullOrEmpty(token))
+            {
+                await _motoRepository.DeleteMoto(id, token);
+                return View("Index");
+            }
+
+            return BadRequest("Token inválido");
         }
     }
 }

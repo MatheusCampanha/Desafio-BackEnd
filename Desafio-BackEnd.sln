@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Desafio-BackEnd.Domain", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Desafio-BackEnd.Infra.Data", "source\Components\Desafio-BackEnd.Infra.Data\Desafio-BackEnd.Infra.Data.csproj", "{20E63B03-B95D-45A0-BB96-6F29F44D3390}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Desafio-BackEnd.WebAPP", "source\WebAPP\Desafio-BackEnd.WebAPP\Desafio-BackEnd.WebAPP.csproj", "{A7FED4BE-5157-4D10-8BCA-0B0759EA059B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Desafio-BackEnd.WebAPP", "source\WebAPP\Desafio-BackEnd.WebAPP\Desafio-BackEnd.WebAPP.csproj", "{A7FED4BE-5157-4D10-8BCA-0B0759EA059B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,5 +1,5 @@
 ﻿@using Desafio_BackEnd.WebAPP.Models.Moto
-@model EditarMotoViewModel
+@model EditMotoViewModel
 
 @{
     ViewData["Title"] = "Editar Placa";
@@ -26,39 +26,26 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
-            const baseUrl = 'https://localhost:7150';
-
             $('#btnSalvar').click(async function () {
-                var updatePlacaCommand = {
+                var model = {
+                    Id: '@Model.Id',
                     Placa: $('#inputPlaca').val()
-                }
+                };
 
-                try {
-                    var endpoint = `/motos/@Model.Id/placa`;
+                var data = JSON.stringify(model);
 
-                    await $.ajax({
-                        url: baseUrl + endpoint,
-                        method: 'PATCH',
-                        contentType: 'application/json',
-                        data: JSON.stringify(updatePlacaCommand),
-                        headers: {
-                            'Token': 'Dk3o5TK6c8DjpQHYB@UvrBi0BI&B&4UH'
-                        }
-                    });
-
-                    alert('Placa alterada com sucesso!');
-                    window.location.href = '@Url.Action("Index", "Moto")'
-                }
-                catch (error) {
-                    var errorMessages = error.responseJSON.Notifications;
-
-                    $.each(errorMessages, function (index, errorMsg) {
-                        if (errorMsg.Message == 'Duplicada')
-                            alert('Placa já cadastrada no sistema');
-                        else
-                            alert(errorMsg);
-                    });
-                }
+                $.ajax({
+                    url: '@Url.Action("SaveEdit", "Moto")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: data,
+                    success: function (result) {
+                        window.location.href = '@Url.Action("Index", "Moto")';
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Erro ao salvar a edição: ' + error);
+                    }
+                });
             });
         });
     </script>

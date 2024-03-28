@@ -4,7 +4,6 @@ using Desafio_BackEnd.Domain.Core.Results;
 using Desafio_BackEnd.Domain.Motos;
 using Desafio_BackEnd.Domain.Motos.DTO;
 using Desafio_BackEnd.Domain.Motos.Interfaces.Repositories;
-using Desafio_BackEnd.Domain.Motos.Queries;
 using MongoDB.Driver;
 using System.Net;
 
@@ -34,50 +33,16 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
             return new Result<Moto>(HttpStatusCode.NoContent.GetHashCode(), null);
         }
 
-        public async Task<Result<MotoDTO>> GetByIdResult(string id)
+        public async Task<List<MotoDTO>> GetResult(string? placa)
         {
-            var moto = await _motos.Find(x => x.Id == id).FirstOrDefaultAsync();
+            var filter = Builders<MotoDTO>.Filter.Empty;
 
-            if (moto != null)
-                return new Result<MotoDTO>(HttpStatusCode.OK.GetHashCode(), moto);
-            else
-                return new Result<MotoDTO>(HttpStatusCode.NoContent.GetHashCode(), null);
-        }
+            if (!string.IsNullOrEmpty(placa))
+                filter = Builders<MotoDTO>.Filter.Eq(x => x.Placa, placa);
 
-        public async Task<Result<MotoDTO>> GetResult(string placa)
-        {
-            var moto = await _motos.Find(x => x.Placa == placa).FirstOrDefaultAsync();
+            var motos = await _motos.Find(filter).ToListAsync();
 
-            if (moto != null)
-                return new Result<MotoDTO>(HttpStatusCode.OK.GetHashCode(), moto);
-            else
-                return new Result<MotoDTO>(HttpStatusCode.NoContent.GetHashCode(), null);
-        }
-
-        public async Task<Result<MotoDTO>> GetResult(GetMotoQuery query)
-        {
-            var filterBuilder = Builders<MotoDTO>.Filter;
-
-            var filter = filterBuilder.Empty; // Filtro inicial vazio
-
-            // Construa o filtro com base nos parâmetros de consulta
-            if (!string.IsNullOrEmpty(query.Placa))
-                filter &= filterBuilder.Eq(x => x.Placa, query.Placa);
-
-            var totalRegistros = await _motos.CountDocumentsAsync(filter);
-
-            var skip = query.RegistrosPorPagina * (query.PaginaAtual - 1);
-            var motos = await _motos.Find(filter).Skip(skip).Limit(query.RegistrosPorPagina).ToListAsync();
-
-            int statusCode;
-            if (motos.Count > 0)
-                statusCode = HttpStatusCode.PartialContent.GetHashCode();
-            else
-                statusCode = HttpStatusCode.UnprocessableEntity.GetHashCode();
-
-            var result = new Result<MotoDTO>(statusCode, query.PaginaAtual, query.RegistrosPorPagina, totalRegistros, motos);
-
-            return result;
+            return motos;
         }
 
         public async Task<Result<MotoDTO>> Insert(MotoDTO moto)

@@ -46,10 +46,10 @@ builder.Services.AddCors(options =>
 });
 
 var key = Encoding.ASCII.GetBytes(settings.Jwt.SecretKey);
-builder.Services.AddAuthentication(options =>
+builder.Services.AddAuthentication(x =>
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
     .AddJwtBearer(x =>
     {
@@ -60,9 +60,11 @@ builder.Services.AddAuthentication(options =>
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(key),
             ValidateIssuer = false,
-            ValidateAudience = false,
+            ValidateAudience = false
         };
     });
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -75,8 +77,9 @@ if (builder.Configuration.GetValue("LogEnvVariables", false))
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
 app.UseRouting();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseCors("AllowAll");

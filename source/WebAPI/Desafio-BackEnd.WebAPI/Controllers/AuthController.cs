@@ -19,10 +19,14 @@ namespace Desafio_BackEnd.WebAPI.Controllers
             var user = await _userHandler.VerifyUser(request.Username, request.Password);
 
             if (user == null)
+                return NotFound();
+
+            var token = _jwtHelper.GenerateToken(user.Username, user.Role.ToString());
+
+            if (string.IsNullOrEmpty(token))
                 return Unauthorized();
 
-            var token = _jwtHelper.GenerateToken(user.Username, nameof(user.Role));
-            return Ok(new { Token = token });
+            return Ok(token);
         }
 
         [HttpPost("/register")]
@@ -30,7 +34,11 @@ namespace Desafio_BackEnd.WebAPI.Controllers
         public async Task<IActionResult> Register([FromBody] CreateUserCommand command)
         {
             var result = await _userHandler.CreateUser(command);
-            return Ok(result);
+
+            if (result.Valid)
+                return Ok(result);
+
+            return UnprocessableEntity(result);
         }
     }
 }
