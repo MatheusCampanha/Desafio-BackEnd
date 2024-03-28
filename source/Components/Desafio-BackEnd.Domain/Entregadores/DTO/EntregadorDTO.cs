@@ -6,7 +6,7 @@ namespace Desafio_BackEnd.Domain.Entregadores.DTO
 {
     public record EntregadorDTO
     {
-        public EntregadorDTO(string id, string nome, string cnpj, DateTime dataNascimento, string numeroCNH, TipoCNHEnum tipoCNH, string caminhoImagemCNH)
+        public EntregadorDTO(string id, string nome, string cnpj, DateTime dataNascimento, string numeroCNH, string tipoCNH, string caminhoImagemCNH)
         {
             Id = id;
             Nome = nome;
@@ -27,7 +27,7 @@ namespace Desafio_BackEnd.Domain.Entregadores.DTO
         public string CNPJ { get; init; }
         public DateTime DataNascimento { get; init; }
         public string NumeroCNH { get; init; }
-        public TipoCNHEnum TipoCNH { get; init; }
+        public string TipoCNH { get; init; }
         public string CaminhoImagemCNH { get; init; }
     }
 }

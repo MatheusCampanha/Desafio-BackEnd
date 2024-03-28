@@ -38,7 +38,7 @@ namespace Desafio_BackEnd.Domain.Entregadores.Handlers
                     return errorResult;
                 }
 
-                var caminhoImagemCNH = await _entregadorRepository.UploadImagemCNH(command.ImagemCNH);
+                var caminhoImagemCNH = _entregadorRepository.SaveImagemCNH(command.NumeroCNH, command.ImagemBase64, command.NomeArquivo);
 
                 var entregador = new Entregador(command.Nome, command.CNPJ, command.DataNascimento, command.NumeroCNH, command.TipoCNH, caminhoImagemCNH);
 
@@ -93,8 +93,9 @@ namespace Desafio_BackEnd.Domain.Entregadores.Handlers
                     return errorResult;
                 }
 
-                await _entregadorRepository.DeleteImagemCNH(entregador.CaminhoImagemCNH);
-                var caminhoImagemCNH = await _entregadorRepository.UploadImagemCNH(command.ImagemCNH);
+                //await _entregadorRepository.DeleteImagemCNH(entregador.CaminhoImagemCNH);
+                //var caminhoImagemCNH = await _entregadorRepository.UploadImagemCNH(command.ImagemCNH);
+                var caminhoImagemCNH = "";
 
                 entregador.SetCaminhoImagemCNH(caminhoImagemCNH);
 
@@ -125,7 +126,7 @@ namespace Desafio_BackEnd.Domain.Entregadores.Handlers
             }
             var entregador = entregadorResult.QueryResult.Registros.First();
 
-            await _entregadorRepository.DeleteImagemCNH(entregador.CaminhoImagemCNH);
+            //await _entregadorRepository.DeleteImagemCNH(entregador.CaminhoImagemCNH);
 
             return await _entregadorRepository.Delete(id);
         }

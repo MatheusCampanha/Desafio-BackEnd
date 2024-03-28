@@ -1,7 +1,6 @@
 ﻿using Desafio_BackEnd.Domain.Core.Commands;
 using Desafio_BackEnd.Domain.Core.Results;
 using Desafio_BackEnd.Domain.Entregadores.DTO;
-using Microsoft.AspNetCore.Http;
 
 namespace Desafio_BackEnd.Domain.Entregadores.Interfaces.Repositories
 {
@@ -15,11 +14,11 @@ namespace Desafio_BackEnd.Domain.Entregadores.Interfaces.Repositories
 
         Task<Result<EntregadorDTO>> GetByNumeroCNHResult(string numeroCNH);
 
-        Task<string> UploadImagemCNH(IFormFile imagemCNH);
+        string SaveImagemCNH(string numeroCNH, string imagemBase64, string nomeArquivo);
 
-        Task DeleteImagemCNH(string caminhoImagemCNH);
+        byte[] GetImagemCNH(string caminhoImagemCNH);
 
-        Task<byte[]> DownloadImagemCNH(string caminhoImagemCNH);
+        void ReplaceImage(string filePath, byte[] newImageBytes);
 
         Task<Result<EntregadorDTO>> Insert(EntregadorDTO entregador);
 

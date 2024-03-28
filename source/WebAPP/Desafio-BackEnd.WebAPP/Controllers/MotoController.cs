@@ -1,8 +1,6 @@
 ﻿using Desafio_BackEnd.WebAPP.Interfaces;
 using Desafio_BackEnd.WebAPP.Models.Moto;
 using Microsoft.AspNetCore.Mvc;
-using System.Numerics;
-using System.Reflection;
 
 namespace Desafio_BackEnd.WebAPP.Controllers
 {

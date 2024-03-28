@@ -24,7 +24,6 @@ namespace Desafio_BackEnd.Infra.CrossCutting
             services.AddScoped<IJwtHelper, JwtHelper>();
 
             services.AddAWSService<IAmazonS3>();
-            services.AddScoped<IS3Helper, S3Helper>();
 
             #endregion Helpers
 

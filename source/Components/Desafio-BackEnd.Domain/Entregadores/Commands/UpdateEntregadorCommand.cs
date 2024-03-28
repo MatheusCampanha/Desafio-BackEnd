@@ -5,17 +5,13 @@ using System.Text.Json.Serialization;
 
 namespace Desafio_BackEnd.Domain.Entregadores.Commands
 {
-    public class UpdateEntregadorCommand(string nome, string cnpj, DateTime dataNascimento, string numeroCNH, TipoCNHEnum tipoCNH, IFormFile imagemCNH) : Command
+    public class UpdateEntregadorCommand(string imagemBase64, string nomeArquivo) : Command
     {
         [JsonIgnore]
         public string? Id { get; private set; }
 
-        public string Nome { get; private set; } = nome;
-        public string CNPJ { get; private set; } = cnpj;
-        public DateTime DataNascimento { get; private set; } = dataNascimento;
-        public string NumeroCNH { get; private set; } = numeroCNH;
-        public TipoCNHEnum TipoCNH { get; private set; } = tipoCNH;
-        public IFormFile ImagemCNH { get; private set; } = imagemCNH;
+        public string ImagemBase64 { get; private set; } = imagemBase64;
+        public string NomeArquivo { get; private set; } = nomeArquivo;
 
         public override bool IsValid()
         {

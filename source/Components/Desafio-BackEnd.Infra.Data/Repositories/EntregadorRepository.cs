@@ -4,8 +4,6 @@ using Desafio_BackEnd.Domain.Core.Results;
 using Desafio_BackEnd.Domain.Entregadores;
 using Desafio_BackEnd.Domain.Entregadores.DTO;
 using Desafio_BackEnd.Domain.Entregadores.Interfaces.Repositories;
-using Desafio_BackEnd.Infra.Data.Helpers;
-using Microsoft.AspNetCore.Http;
 using MongoDB.Driver;
 using System.Net;
 
@@ -14,14 +12,9 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
     public class EntregadorRepository : IEntregadorRepository
     {
         private readonly IMongoCollection<EntregadorDTO> _entregadores;
-        private readonly Settings _settings;
-        private readonly IS3Helper _s3Helper;
 
-        public EntregadorRepository(Settings settings, IS3Helper s3Helper)
+        public EntregadorRepository(Settings settings)
         {
-            _settings = settings;
-            _s3Helper = s3Helper;
-
             var client = new MongoClient(settings.ConnectionStrings.DBApplication);
             var database = client.GetDatabase(settings.ConnectionStrings.DatabaseName);
             _entregadores = database.GetCollection<EntregadorDTO>("Entregador");
@@ -97,26 +90,54 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
                 return new CommandResult(HttpStatusCode.NotFound.GetHashCode());
         }
 
-        public async Task<string> UploadImagemCNH(IFormFile imagemCNH)
+        public string SaveImagemCNH(string numeroCNH, string imagemBase64, string nomeArquivo)
         {
-            var contentType = "image/png";
-            using var memoryStream = new MemoryStream();
-            await imagemCNH.CopyToAsync(memoryStream);
-            var imgPath = await _s3Helper.Upload(_settings.S3Settings.BucketName, _settings.S3Settings.Key, memoryStream, contentType);
-            return imgPath;
+            try
+            {
+                byte[] bytes = Convert.FromBase64String(imagemBase64);
+
+                var directory = $"entregador_{numeroCNH}";
+
+                if (!Directory.Exists(directory))
+                    Directory.CreateDirectory(directory);
+
+                var filePath = Path.Combine(directory, nomeArquivo);
+
+                File.WriteAllBytes(filePath, bytes);
+
+                return filePath;
+            }
+            catch (ApplicationException)
+            {
+                return string.Empty;
+            }
         }
 
-        public async Task DeleteImagemCNH(string caminhoImagemCNH)
+        public byte[] GetImagemCNH(string caminhoImagemCNH)
         {
-            await _s3Helper.Delete(_settings.S3Settings.BucketName, caminhoImagemCNH);
+            try
+            {
+                if (!File.Exists(caminhoImagemCNH))
+                    throw new FileNotFoundException("Arquivo não encontrado", caminhoImagemCNH);
+
+                return File.ReadAllBytes(caminhoImagemCNH);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
-        public async Task<byte[]> DownloadImagemCNH(string caminhoImagemCNH)
+        public void ReplaceImage(string filePath, byte[] newImageBytes)
         {
-            using var memoryStream = new MemoryStream();
-            await _s3Helper.Download(_settings.S3Settings.BucketName, caminhoImagemCNH, memoryStream);
-            memoryStream.Position = 0;
-            return memoryStream.ToArray();
+            try
+            {
+                if (!File.Exists(filePath))
+                    throw new FileNotFoundException("Arquivo não encontrado", filePath);
+
+                File.WriteAllBytes(filePath, newImageBytes);
+            }
+            catch (Exception) { }
         }
     }
 }

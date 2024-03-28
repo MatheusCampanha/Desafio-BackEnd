@@ -36,7 +36,7 @@ namespace Desafio_BackEnd.WebAPI.Controllers
         [HttpPost]
         [Route("entregadores")]
         [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(EntregadorDTO))]
-        public async Task<IActionResult> Post(InsertEntregadorCommand command)
+        public async Task<IActionResult> Post([FromBody] InsertEntregadorCommand command)
         {
             var result = await _entregadorHandler.Handle(command);
             return ResultFirst(result);

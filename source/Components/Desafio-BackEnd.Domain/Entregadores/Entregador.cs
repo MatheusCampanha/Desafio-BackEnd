@@ -5,7 +5,7 @@ namespace Desafio_BackEnd.Domain.Entregadores
 {
     public class Entregador : Entity
     {
-        public Entregador(string? id, string nome, string cnpj, DateTime dataNascimento, string numeroCNH, TipoCNHEnum tipoCNH, string caminhoImagemCNH)
+        public Entregador(string? id, string nome, string cnpj, DateTime dataNascimento, string numeroCNH, string tipoCNH, string caminhoImagemCNH)
         {
             SetId(id);
             SetNome(nome);
@@ -16,7 +16,7 @@ namespace Desafio_BackEnd.Domain.Entregadores
             SetCaminhoImagemCNH(caminhoImagemCNH);
         }
 
-        public Entregador(string nome, string cnpj, DateTime dataNascimento, string numeroCNH, TipoCNHEnum tipoCNH, string caminhoImagemCNH)
+        public Entregador(string nome, string cnpj, DateTime dataNascimento, string numeroCNH, string tipoCNH, string caminhoImagemCNH)
         {
             SetNome(nome);
             SetCNPJ(cnpj);
@@ -31,7 +31,7 @@ namespace Desafio_BackEnd.Domain.Entregadores
         public string CNPJ { get; private set; } = default!;
         public DateTime DataNascimento { get; private set; }
         public string NumeroCNH { get; private set; } = default!;
-        public TipoCNHEnum TipoCNH { get; private set; }
+        public string TipoCNH { get; private set; }
         public string CaminhoImagemCNH { get; private set; } = default!;
 
         public void SetId(string id)
@@ -64,7 +64,7 @@ namespace Desafio_BackEnd.Domain.Entregadores
                 NumeroCNH = numeroCNH;
         }
 
-        public void SetTipoCNH(TipoCNHEnum tipoCNH)
+        public void SetTipoCNH(string tipoCNH)
         {
             if (Valid)
                 TipoCNH = tipoCNH;
