@@ -19,7 +19,7 @@ namespace Desafio_BackEnd.WebAPI.Controllers
 
         [HttpGet]
         [Route("motos")]
-        [ProducesResponseType((int)HttpStatusCode.PartialContent, Type = typeof(QueryResult<MotoDTO>))]
+        [ProducesResponseType((int)HttpStatusCode.PartialContent, Type = typeof(List<MotoDTO>))]
         public async Task<IActionResult> GetAll(string? placa)
         {
             var result = await _motoRepository.GetResult(placa);

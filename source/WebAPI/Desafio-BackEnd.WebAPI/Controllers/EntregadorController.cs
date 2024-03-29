@@ -1,4 +1,5 @@
-﻿using Desafio_BackEnd.Domain.Entregadores.Commands;
+﻿using Desafio_BackEnd.Domain.Core.Queries;
+using Desafio_BackEnd.Domain.Entregadores.Commands;
 using Desafio_BackEnd.Domain.Entregadores.DTO;
 using Desafio_BackEnd.Domain.Entregadores.Interfaces.Handlers;
 using Desafio_BackEnd.Domain.Entregadores.Interfaces.Repositories;
@@ -15,23 +16,30 @@ namespace Desafio_BackEnd.WebAPI.Controllers
         private readonly IEntregadorRepository _entregadorRepository = entregadorRepository;
 
         [HttpGet]
-        [Route("entregadores/{id}")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(EntregadorDTO))]
-        public async Task<IActionResult> Get(string id)
+        [Route("entregadores")]
+        [ProducesResponseType((int)HttpStatusCode.PartialContent, Type = typeof(List<EntregadorDTO>))]
+        public async Task<IActionResult> GetAll()
         {
-            return ResultFirst(await _entregadorRepository.GetByIdResult(id));
+            var result = await _entregadorRepository.GetAll();
+
+            if (result.Count > 0)
+                return Ok(result);
+            else
+                return NotFound();
         }
 
-        //[HttpGet]
-        //[Route("entregadores")]
-        //[ProducesResponseType((int)HttpStatusCode.PartialContent, Type = typeof(QueryResult<EntregadorDTO>))]
-        //public async Task<IActionResult> GetAll([FromQuery] GetEntregadorQuery query)
-        //{
-        //    if (!query.IsValid())
-        //        return Result(new CommandResult(422, query));
+        [HttpGet]
+        [Route("entregadores/{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(EntregadorDTO))]
+        public async Task<IActionResult> GetById(string id)
+        {
+            var result = await _entregadorRepository.GetByIdResult(id);
 
-        //    return Result(await _entregadorRepository.GetResult(query));
-        //}
+            if (result != null)
+                return Ok(result);
+            else
+                return NotFound();
+        }
 
         [HttpPost]
         [Route("entregadores")]
@@ -42,23 +50,14 @@ namespace Desafio_BackEnd.WebAPI.Controllers
             return ResultFirst(result);
         }
 
-        [HttpPut]
-        [Route("entregadores/{id}")]
-        public async Task<IActionResult> Put(string id, [FromBody] UpdateEntregadorCommand command)
+        [HttpPatch]
+        [Route("entregadores/{id}/imagemCNH")]
+        public async Task<IActionResult> Patch(string id, [FromBody] IFormFile imagemCNH)
         {
-            command.AlterId(id);
-            var result = await _entregadorHandler.Handle(command);
+            var result = await _entregadorHandler.Handle(id, imagemCNH);
             return Result(result);
         }
 
-        //[HttpPatch]
-        //[Route("entregadores/{id}/placa")]
-        //public async Task<IActionResult> Patch(string id, [FromBody] UpdatePlacaCommand command)
-        //{
-        //    command.AlterId(id);
-        //    var result = await _entregadorHandler.Handle(command);
-        //    return Result(result);
-        //}
 
         [HttpDelete]
         [Route("entregadores/{id}")]

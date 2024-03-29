@@ -8,6 +8,5 @@
         public DateTime DataNascimento { get; set; }
         public string NumeroCNH { get; set; } = default!;
         public string TipoCNH { get; set; } = default!;
-        public string ImagemCNH { get; set; } = default!;
     }
 }

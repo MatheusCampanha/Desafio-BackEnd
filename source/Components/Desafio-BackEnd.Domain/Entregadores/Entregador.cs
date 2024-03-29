@@ -1,22 +1,10 @@
 ﻿using Desafio_BackEnd.Domain.Core.Entities;
-using Desafio_BackEnd.Domain.Core.Enums;
 
 namespace Desafio_BackEnd.Domain.Entregadores
 {
     public class Entregador : Entity
     {
-        public Entregador(string? id, string nome, string cnpj, DateTime dataNascimento, string numeroCNH, string tipoCNH, string caminhoImagemCNH)
-        {
-            SetId(id);
-            SetNome(nome);
-            SetCNPJ(cnpj);
-            SetDataNascimento(dataNascimento);
-            SetNumeroCNH(numeroCNH);
-            SetTipoCNH(tipoCNH);
-            SetCaminhoImagemCNH(caminhoImagemCNH);
-        }
-
-        public Entregador(string nome, string cnpj, DateTime dataNascimento, string numeroCNH, string tipoCNH, string caminhoImagemCNH)
+        public Entregador(string nome, string cnpj, DateTime dataNascimento, string numeroCNH, string tipoCNH, string? caminhoImagemCNH = null)
         {
             SetNome(nome);
             SetCNPJ(cnpj);
@@ -31,8 +19,8 @@ namespace Desafio_BackEnd.Domain.Entregadores
         public string CNPJ { get; private set; } = default!;
         public DateTime DataNascimento { get; private set; }
         public string NumeroCNH { get; private set; } = default!;
-        public string TipoCNH { get; private set; }
-        public string CaminhoImagemCNH { get; private set; } = default!;
+        public string TipoCNH { get; private set; } = default!;
+        public string? CaminhoImagemCNH { get; private set; }
 
         public void SetId(string id)
         {
@@ -70,7 +58,7 @@ namespace Desafio_BackEnd.Domain.Entregadores
                 TipoCNH = tipoCNH;
         }
 
-        public void SetCaminhoImagemCNH(string caminhoImagemCNH)
+        public void SetCaminhoImagemCNH(string? caminhoImagemCNH)
         {
             if (Valid)
                 CaminhoImagemCNH = caminhoImagemCNH;

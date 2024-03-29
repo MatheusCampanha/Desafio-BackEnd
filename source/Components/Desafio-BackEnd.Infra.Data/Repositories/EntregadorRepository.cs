@@ -4,6 +4,7 @@ using Desafio_BackEnd.Domain.Core.Results;
 using Desafio_BackEnd.Domain.Entregadores;
 using Desafio_BackEnd.Domain.Entregadores.DTO;
 using Desafio_BackEnd.Domain.Entregadores.Interfaces.Repositories;
+using Microsoft.AspNetCore.Http;
 using MongoDB.Driver;
 using System.Net;
 
@@ -33,14 +34,18 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
             return new Result<Entregador>(HttpStatusCode.NoContent.GetHashCode(), null);
         }
 
-        public async Task<Result<EntregadorDTO>> GetByIdResult(string id)
+        public async Task<List<EntregadorDTO>> GetAll()
         {
-            var entregador = await _entregadores.Find(x => x.Id == id).FirstOrDefaultAsync();
+            var entregadores = await _entregadores.Find(_ => true).ToListAsync();
 
-            if (entregador != null)
-                return new Result<EntregadorDTO>(HttpStatusCode.OK.GetHashCode(), entregador);
-            else
-                return new Result<EntregadorDTO>(HttpStatusCode.NoContent.GetHashCode(), null);
+            return entregadores;
+        }
+
+        public async Task<EntregadorDTO> GetByIdResult(string id)
+        {
+            var result = await _entregadores.Find(x => x.Id.Equals(id)).FirstOrDefaultAsync();
+
+            return result;
         }
 
         public async Task<Result<EntregadorDTO>> GetByCNPJResult(string cnpj)
@@ -90,24 +95,25 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
                 return new CommandResult(HttpStatusCode.NotFound.GetHashCode());
         }
 
-        public string SaveImagemCNH(string numeroCNH, string imagemBase64, string nomeArquivo)
+        public string SaveImagemCNH(string numeroCNH, IFormFile imagemFile)
         {
             try
             {
-                byte[] bytes = Convert.FromBase64String(imagemBase64);
-
                 var directory = $"entregador_{numeroCNH}";
 
                 if (!Directory.Exists(directory))
                     Directory.CreateDirectory(directory);
 
-                var filePath = Path.Combine(directory, nomeArquivo);
+                var filePath = Path.Combine(directory, imagemFile.FileName);
 
-                File.WriteAllBytes(filePath, bytes);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    imagemFile.CopyTo(stream);
+                }
 
                 return filePath;
             }
-            catch (ApplicationException)
+            catch (Exception)
             {
                 return string.Empty;
             }
@@ -128,16 +134,37 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
             }
         }
 
-        public void ReplaceImage(string filePath, byte[] newImageBytes)
+        public void ReplaceImage(string filePath, IFormFile newImageFile)
         {
             try
             {
                 if (!File.Exists(filePath))
                     throw new FileNotFoundException("Arquivo não encontrado", filePath);
 
-                File.WriteAllBytes(filePath, newImageBytes);
+                using var stream = new FileStream(filePath, FileMode.Create);
+                newImageFile.CopyTo(stream);
             }
             catch (Exception) { }
+        }
+
+        public bool DeleteImage(string filePath)
+        {
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

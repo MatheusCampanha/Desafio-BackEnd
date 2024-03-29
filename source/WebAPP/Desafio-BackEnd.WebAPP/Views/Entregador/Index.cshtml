@@ -1,81 +1,54 @@
 ﻿@using Desafio_BackEnd.WebAPP.Models.Entregador
-@model CreateEntregadorViewModel
+@model EntregadorViewModel
 
 @{
-    ViewData["Title"] = "Cadastrar Entregador";
+    ViewData["Title"] = "Lista Entregadores";
 }
 
-<h1>Cadastrar Entregador</h1>
+<h1>Lista de Entregadores</h1>
 
-<form id="formEntregador" enctype="multipart/form-data">
-    <div class="form-group">
-        <label for="Nome">Nome</label>
-        <input type="text" id="Nome" name="Nome" class="form-control" />
-    </div>
+<button class="btn btn-primary" id="btnBuscar">Buscar</button>
 
-    <div class="form-group">
-        <label for="Cnpj">CNPJ</label>
-        <input type="text" id="Cnpj" name="Cnpj" class="form-control" />
-    </div>
+@Html.ActionLink("Novo", "Create", "Entregador", null, new { @class = "btn btn-primary" })
 
-    <div class="form-group">
-        <label for="DataNascimento">Data de Nascimento</label>
-        <input type="date" id="DataNascimento" name="DataNascimento" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label for="NumeroCnh">Número CNH</label>
-        <input type="text" id="NumeroCnh" name="NumeroCnh" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label for="TipoCnh">Tipo CNH</label>
-        <select id="TipoCnh" name="TipoCnh" class="form-control">
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="AeB">A e B</option>
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label for="ImagemUrl">Imagem</label>
-        <input type="file" id="ImagemUrl" name="ImagemUrl" class="form-control-file" />
-    </div>
-
-    <button type="button" id="btnSalvar" class="btn btn-primary">Salvar</button>
-</form>
+<div id="tableContainer">
+    @Html.Partial("_EntregadoresTablePartial", Model)
+</div>
 
 @section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $('#btnSalvar').click(function () {
-                var fileInput = $('#ImagemUrl')[0].files[0];
-                var formData = new FormData();
+        buscarEntregadores();
 
-                formData.append('Nome', $('#Nome').val());
-                formData.append('Cnpj', $('#Cnpj').val());
-                formData.append('DataNascimento', $('#DataNascimento').val());
-                formData.append('NumeroCNH', $('#NumeroCnh').val());
-                formData.append('TipoCNH', $('#TipoCnh').val());
-                formData.append('ImagemCNH', fileInput);
-
-                $.ajax({
-                    url: '@Url.Action("Create", "Entregador")',
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (result) {
-                        // Lidar com a resposta bem-sucedida
-                        console.log("Entregador cadastrado com sucesso!");
-                        window.location.href = '@Url.Action("Index", "Home")'; // Redirecionar para a página inicial
-                    },
-                    error: function (xhr, status, error) {
-                        // Lidar com erros na solicitação
-                        console.error('Erro ao cadastrar o entregador:', error);
-                    }
-                });
-            });
+        $("#btnBuscar").click(function () {
+            buscarEntregadores();
         });
+
+        function buscarEntregadores() {
+            $.ajax({
+                url: '@Url.Action("GetEntregadores", "Entregador")',
+                type: 'GET',
+                success: function (result) {
+                    $('#tableContainer').html(result);
+                },
+                error: function (xhr, status, error) {
+                    alert('Erro ao buscar entregadores: ' + error);
+                }
+            });
+        }
+
+        function deleteEntregador(id) {
+            $.ajax({
+                url: '@Url.Action("Delete", "Moto")',
+                type: 'DELETE',
+                data: { id: id },
+                success: function (result) {
+                    window.location.href = '@Url.Action("Index", "Moto")';
+                },
+                error: function (xhr, status, error) {
+                    alert('Erro ao excluir: ' + error);
+                }
+            });
+        };
     </script>
 }

@@ -4,6 +4,7 @@ using Desafio_BackEnd.Domain.Entregadores.Commands;
 using Desafio_BackEnd.Domain.Entregadores.DTO;
 using Desafio_BackEnd.Domain.Entregadores.Interfaces.Handlers;
 using Desafio_BackEnd.Domain.Entregadores.Interfaces.Repositories;
+using Microsoft.AspNetCore.Http;
 using System.Net;
 
 namespace Desafio_BackEnd.Domain.Entregadores.Handlers
@@ -38,9 +39,7 @@ namespace Desafio_BackEnd.Domain.Entregadores.Handlers
                     return errorResult;
                 }
 
-                var caminhoImagemCNH = _entregadorRepository.SaveImagemCNH(command.NumeroCNH, command.ImagemBase64, command.NomeArquivo);
-
-                var entregador = new Entregador(command.Nome, command.CNPJ, command.DataNascimento, command.NumeroCNH, command.TipoCNH, caminhoImagemCNH);
+                var entregador = new Entregador(command.Nome, command.CNPJ, command.DataNascimento, command.NumeroCNH, command.TipoCNH);
 
                 if (entregador.Invalid)
                 {
@@ -57,19 +56,13 @@ namespace Desafio_BackEnd.Domain.Entregadores.Handlers
             }
         }
 
-        public async Task<CommandResult> Handle(UpdateEntregadorCommand command)
+        public async Task<CommandResult> Handle(string id, IFormFile imagemCNH)
         {
             try
             {
                 var errorResult = new CommandResult(HttpStatusCode.UnprocessableEntity.GetHashCode());
 
-                if (!command.IsValid())
-                {
-                    errorResult.AddNotifications(command);
-                    return errorResult;
-                }
-
-                var entregadorResult = await _entregadorRepository.GetById(command.Id!);
+                var entregadorResult = await _entregadorRepository.GetById(id);
                 if (entregadorResult.StatusCode != HttpStatusCode.OK.GetHashCode())
                 {
                     errorResult.AddNotifications(entregadorResult);
@@ -77,26 +70,13 @@ namespace Desafio_BackEnd.Domain.Entregadores.Handlers
                 }
                 var entregador = entregadorResult.QueryResult.Registros.First();
 
-                var uniqueCNPJResult = await _entregadorRepository.GetByCNPJResult(command.CNPJ);
-                var uniqueCPNJ = uniqueCNPJResult.QueryResult?.Registros?.First();
-                if (uniqueCNPJResult.StatusCode == HttpStatusCode.OK.GetHashCode() && uniqueCPNJ != null && uniqueCPNJ.Id != command.Id)
+                if (!string.IsNullOrEmpty(entregador.CaminhoImagemCNH))
                 {
-                    errorResult.AddNotification(nameof(command.CNPJ), "Duplicado");
-                    return errorResult;
+                    _entregadorRepository.ReplaceImage(entregador.CaminhoImagemCNH, imagemCNH);
+                    return new CommandResult(HttpStatusCode.NoContent.GetHashCode());
                 }
 
-                var uniqueNumeroCNHResult = await _entregadorRepository.GetByNumeroCNHResult(command.NumeroCNH);
-                var uniqueNumeroCNH = uniqueNumeroCNHResult.QueryResult?.Registros?.First();
-                if (uniqueNumeroCNHResult.StatusCode == HttpStatusCode.OK.GetHashCode() && uniqueNumeroCNH != null && uniqueNumeroCNH.Id != command.Id)
-                {
-                    errorResult.AddNotification(nameof(command.NumeroCNH), "Duplicado");
-                    return errorResult;
-                }
-
-                //await _entregadorRepository.DeleteImagemCNH(entregador.CaminhoImagemCNH);
-                //var caminhoImagemCNH = await _entregadorRepository.UploadImagemCNH(command.ImagemCNH);
-                var caminhoImagemCNH = "";
-
+                var caminhoImagemCNH = _entregadorRepository.SaveImagemCNH(entregador.NumeroCNH, imagemCNH);
                 entregador.SetCaminhoImagemCNH(caminhoImagemCNH);
 
                 if (entregador.Invalid)
@@ -126,7 +106,8 @@ namespace Desafio_BackEnd.Domain.Entregadores.Handlers
             }
             var entregador = entregadorResult.QueryResult.Registros.First();
 
-            //await _entregadorRepository.DeleteImagemCNH(entregador.CaminhoImagemCNH);
+            if (!string.IsNullOrEmpty(entregador.CaminhoImagemCNH))
+                _entregadorRepository.DeleteImage(entregador.CaminhoImagemCNH);
 
             return await _entregadorRepository.Delete(id);
         }

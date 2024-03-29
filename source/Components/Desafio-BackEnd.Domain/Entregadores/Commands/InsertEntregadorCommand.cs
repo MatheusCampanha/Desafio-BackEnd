@@ -2,15 +2,13 @@
 
 namespace Desafio_BackEnd.Domain.Entregadores.Commands
 {
-    public class InsertEntregadorCommand(string nome, string cNPJ, DateTime dataNascimento, string numeroCNH, string tipoCNH, string imagemBase64, string nomeArquivo) : Command
+    public class InsertEntregadorCommand(string nome, string cNPJ, DateTime dataNascimento, string numeroCNH, string tipoCNH) : Command
     {
         public string Nome { get; private set; } = nome;
         public string CNPJ { get; private set; } = cNPJ;
         public DateTime DataNascimento { get; private set; } = dataNascimento;
         public string NumeroCNH { get; private set; } = numeroCNH;
         public string TipoCNH { get; private set; } = tipoCNH;
-        public string ImagemBase64 { get; private set; } = imagemBase64;
-        public string NomeArquivo { get; private set; } = nomeArquivo;
 
         public override bool IsValid()
         {
