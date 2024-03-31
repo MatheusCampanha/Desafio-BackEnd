@@ -61,7 +61,7 @@
 @section scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).on("click", ".alugar", function () {
+        $(document).on("click", ".alugar", async function () {
             var motoId = $(this).data("id");
             var valorTotalDecimal = parseFloat($("#ValorTotal").val().replace(',', '.'));
             var formData = new FormData();
@@ -73,13 +73,21 @@
             formData.append('DataPrevisaoEntrega', $("#DataPrevisaoEntrega").val());
             formData.append('ValorTotal', valorTotalDecimal);
 
-            $.ajax({
+            var result = await $.ajax({
                 url: '@Url.Action("Rent", "Locacao")',
                 type: 'POST',
                 data: formData,
                 processData: false,
                 contentType: false
             });
+
+            if (result.status == "Ok"){
+                alert(result.message);
+                location.reload();
+            }
+            else {
+                alert(result.message);
+            }
         });
 
         $("#DataInicial, #plan").change(function () {
@@ -180,8 +188,11 @@
         });
 
         function buscarMoto() {
+            var dataInicio = new Date($("#DataInicial").val()).toISOString();
+
             $.ajax({
                 url: '@Url.Action("MotosAvaiable", "Moto")',
+                data: { dataInicio: dataInicio },
                 type: 'GET',
                 success: function (result) {
                     if (result.length == 0) {

@@ -2,13 +2,15 @@
 using Desafio_BackEnd.Domain.Entregadores.Handlers;
 using Desafio_BackEnd.Domain.Entregadores.Interfaces.Handlers;
 using Desafio_BackEnd.Domain.Entregadores.Interfaces.Repositories;
+using Desafio_BackEnd.Domain.Locacoes.Handlers;
+using Desafio_BackEnd.Domain.Locacoes.Interfaces.Handlers;
+using Desafio_BackEnd.Domain.Locacoes.Interfaces.Repositories;
 using Desafio_BackEnd.Domain.Motos.Handlers;
 using Desafio_BackEnd.Domain.Motos.Interfaces.Handlers;
 using Desafio_BackEnd.Domain.Motos.Interfaces.Repositories;
 using Desafio_BackEnd.Domain.Users.Handlers;
 using Desafio_BackEnd.Domain.Users.Interfaces.Handlers;
 using Desafio_BackEnd.Domain.Users.Interfaces.Repositories;
-using Desafio_BackEnd.Infra.Data.Helpers;
 using Desafio_BackEnd.Infra.Data.Helpers.Jwt;
 using Desafio_BackEnd.Infra.Data.Repositories;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +32,7 @@ namespace Desafio_BackEnd.Infra.CrossCutting
             #region Handlers
 
             services.AddScoped<IEntregadorHandler, EntregadorHandler>();
+            services.AddScoped<ILocacaoHandler, LocacaoHandler>();
             services.AddScoped<IMotoHandler, MotoHandler>();
             services.AddScoped<IUserHandler, UserHandler>();
 
@@ -38,6 +41,7 @@ namespace Desafio_BackEnd.Infra.CrossCutting
             #region Repositories
 
             services.AddScoped<IEntregadorRepository, EntregadorRepository>();
+            services.AddScoped<ILocacaoRepository, LocacaoRepository>();
             services.AddScoped<IMotoRepository, MotoRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
 

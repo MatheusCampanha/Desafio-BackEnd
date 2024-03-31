@@ -4,6 +4,7 @@ using Desafio_BackEnd.WebAPP.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IEntregadorRepository, EntregadorRepository>();
+builder.Services.AddScoped<ILocacaoRepository, LocacaoRepository>();
 builder.Services.AddScoped<IMotoRepository, MotoRepository>();
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 

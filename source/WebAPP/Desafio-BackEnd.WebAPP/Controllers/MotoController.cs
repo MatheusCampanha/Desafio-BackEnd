@@ -1,4 +1,5 @@
-﻿using Desafio_BackEnd.WebAPP.Interfaces;
+﻿using Desafio_BackEnd.WebAPP.Configurations.Filters;
+using Desafio_BackEnd.WebAPP.Interfaces;
 using Desafio_BackEnd.WebAPP.Models.Locacao;
 using Desafio_BackEnd.WebAPP.Models.Moto;
 using Microsoft.AspNetCore.Mvc;
@@ -20,16 +21,11 @@ namespace Desafio_BackEnd.WebAPP.Controllers
             return View();
         }
 
-        public async Task<ActionResult> MotosAvaiable()
+        [JwtAuthorizationFilter]
+        public async Task<ActionResult> MotosAvaiable(string token, DateTime dataInicio)
         {
-            var token = HttpContext.Session.GetString("JWTToken");
-            if (!string.IsNullOrEmpty(token))
-            {
-                var result = await _motoRepository.GetAvaiable(token);
-                return Json(result);
-            }
-
-            return BadRequest("Token inválido");
+            var result = await _motoRepository.GetAvaiable(token, dataInicio);
+            return Json(result);
         }
 
         public ActionResult Edit(string id, string placa)

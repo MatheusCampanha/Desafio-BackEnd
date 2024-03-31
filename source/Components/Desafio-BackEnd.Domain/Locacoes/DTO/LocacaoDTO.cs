@@ -13,6 +13,8 @@ namespace Desafio_BackEnd.Domain.Locacoes.DTO
         public DateTime DataInicial { get; init; }
         public DateTime DataFinal { get; init; }
         public DateTime DataPrevisaoEntrega { get; init; }
+
+        [BsonRepresentation(BsonType.Decimal128)]
         public decimal ValorTotal { get; init; }
 
         public LocacaoDTO(Locacao locacao) : this(locacao.Id, locacao.EntregadorId, locacao.MotoId, locacao.DataInicial, locacao.DataFinal, locacao.DataPrevisaoEntrega, locacao.ValorTotal)

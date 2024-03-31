@@ -7,8 +7,9 @@ using System.Security.Claims;
 
 namespace Desafio_BackEnd.WebAPP.Controllers
 {
-    public class LocacaoController(IEntregadorRepository entregadorRepository) : Controller
+    public class LocacaoController(ILocacaoRepository locacaoRepository, IEntregadorRepository entregadorRepository) : Controller
     {
+        private readonly ILocacaoRepository _locacaoRepository = locacaoRepository;
         private readonly IEntregadorRepository _entregadorRepository = entregadorRepository;
 
         [JwtAuthorizationFilter]
@@ -21,10 +22,17 @@ namespace Desafio_BackEnd.WebAPP.Controllers
         }
 
         [JwtAuthorizationFilter]
-        public async Task<IActionResult> Rent(LocacaoViewModel model)
+        public async Task<IActionResult> Rent(string token, LocacaoViewModel model)
         {
-            var teste = "";
-            return View("index");
+            try
+            {
+                await _locacaoRepository.Create(model, token);
+                return Json(new {status = "Ok", message = "Locação confirmada!"});
+            }
+            catch
+            {
+                return Json(new { status = "Error", message = "Falha ao realizar confirmada!" });
+            }
         }
 
         private static string GetUserId(string? jwtToken)

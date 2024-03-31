@@ -1,6 +1,7 @@
 ﻿using Desafio_BackEnd.Domain.Core.Commands;
 using Desafio_BackEnd.Domain.Core.Data;
 using Desafio_BackEnd.Domain.Core.Results;
+using Desafio_BackEnd.Domain.Locacoes.DTO;
 using Desafio_BackEnd.Domain.Motos;
 using Desafio_BackEnd.Domain.Motos.DTO;
 using Desafio_BackEnd.Domain.Motos.Interfaces.Repositories;
@@ -13,12 +14,14 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
     public class MotoRepository : IMotoRepository
     {
         private readonly IMongoCollection<MotoDTO> _motos;
+        private readonly IMongoCollection<LocacaoDTO> _locacoes;
 
         public MotoRepository(Settings settings)
         {
             var client = new MongoClient(settings.ConnectionStrings.DBApplication);
             var database = client.GetDatabase(settings.ConnectionStrings.DatabaseName);
             _motos = database.GetCollection<MotoDTO>("Moto");
+            _locacoes = database.GetCollection<LocacaoDTO>("Moto");
         }
 
         public async Task<Result<Moto>> GetById(string id)
@@ -46,9 +49,15 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
             return motos;
         }
 
-        public async Task<List<MotoDTO>> GetAvaiable()
+        public async Task<List<MotoDTO>> GetAvaiable(DateTime dataInicio)
         {
-            var filter = Builders<MotoDTO>.Filter.Eq(x => x.Alugada, false);
+            var locacoes = await _locacoes.Find(loc => loc.DataPrevisaoEntrega < dataInicio).ToListAsync();
+            var locacaoIds = locacoes.Select(loc => loc.MotoId);
+
+            var filter = Builders<MotoDTO>.Filter.And(
+                Builders<MotoDTO>.Filter.Eq(x => x.Alugada, false),
+                Builders<MotoDTO>.Filter.Not(Builders<MotoDTO>.Filter.In(x => x.Id, locacaoIds))
+            );
 
             var motos = await _motos.Find(filter).ToListAsync();
 

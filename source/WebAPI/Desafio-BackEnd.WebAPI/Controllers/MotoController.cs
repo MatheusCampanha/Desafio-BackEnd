@@ -32,11 +32,11 @@ namespace Desafio_BackEnd.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("motos/disponiveis")]
+        [Route("motos/disponiveis/")]
         [ProducesResponseType((int)HttpStatusCode.PartialContent, Type = typeof(List<MotoDTO>))]
-        public async Task<IActionResult> GetAvaiable()
+        public async Task<IActionResult> GetAvaiable([FromQuery] DateTime dataInicio)
         {
-            var result = await _motoRepository.GetAvaiable();
+            var result = await _motoRepository.GetAvaiable(dataInicio);
 
             if (result.Count > 0)
                 return Ok(result);
