@@ -10,7 +10,7 @@ namespace Desafio_BackEnd.Infra.Data.Helpers.Jwt
     {
         private readonly Settings _settings = settings;
 
-        public string GenerateToken(string username, string role)
+        public string GenerateToken(string id, string role)
         {
             var secretKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_settings.Jwt.SecretKey));
 
@@ -19,7 +19,7 @@ namespace Desafio_BackEnd.Infra.Data.Helpers.Jwt
             var tokenOptions = new JwtSecurityToken(
                 claims:
                 [
-                    new Claim(type: ClaimTypes.Name, username),
+                    new Claim(type: ClaimTypes.NameIdentifier, id),
                     new Claim(type: ClaimTypes.Role, role)
                 ],
                 expires: DateTime.Now.AddHours(1),

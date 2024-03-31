@@ -2,6 +2,6 @@
 {
     public interface IJwtHelper
     {
-        string GenerateToken(string username, string role);
+        string GenerateToken(string id, string role);
     }
 }

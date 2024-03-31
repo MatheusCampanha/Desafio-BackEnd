@@ -6,5 +6,6 @@
         public int Ano { get; set; }
         public string Modelo { get; set; } = default!;
         public string Placa { get; set; } = default!;
+        public bool Alugada { get; set; }
     }
 }

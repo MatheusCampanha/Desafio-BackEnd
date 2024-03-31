@@ -1,6 +1,8 @@
 ﻿using Desafio_BackEnd.WebAPP.Interfaces;
+using Desafio_BackEnd.WebAPP.Models.Locacao;
 using Desafio_BackEnd.WebAPP.Models.Moto;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Desafio_BackEnd.WebAPP.Controllers
 {
@@ -18,14 +20,13 @@ namespace Desafio_BackEnd.WebAPP.Controllers
             return View();
         }
 
-        [HttpGet]
-        public async Task<ActionResult> GetMotos(string? placa)
+        public async Task<ActionResult> MotosAvaiable()
         {
             var token = HttpContext.Session.GetString("JWTToken");
             if (!string.IsNullOrEmpty(token))
             {
-                List<MotoViewModel> result = await _motoRepository.GetAll(placa, token);
-                return PartialView("_MotosTablePartial", result);
+                var result = await _motoRepository.GetAvaiable(token);
+                return Json(result);
             }
 
             return BadRequest("Token inválido");
@@ -40,6 +41,19 @@ namespace Desafio_BackEnd.WebAPP.Controllers
             };
 
             return View("Edit", model);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetMotos(string? placa)
+        {
+            var token = HttpContext.Session.GetString("JWTToken");
+            if (!string.IsNullOrEmpty(token))
+            {
+                List<MotoViewModel> result = await _motoRepository.GetAll(placa, token);
+                return PartialView("_MotosTablePartial", result);
+            }
+
+            return BadRequest("Token inválido");
         }
 
         [HttpPost]

@@ -29,7 +29,7 @@ namespace Desafio_BackEnd.Domain.Motos.Handlers
                 return errorResult;
             }
 
-            var moto = new Moto(command.Ano, command.Modelo, command.Placa);
+            var moto = new Moto(command.Ano, command.Modelo, command.Placa, false);
 
             if (moto.Invalid)
             {

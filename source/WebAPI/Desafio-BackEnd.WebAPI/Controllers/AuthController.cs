@@ -21,7 +21,7 @@ namespace Desafio_BackEnd.WebAPI.Controllers
             if (user == null)
                 return NotFound();
 
-            var token = _jwtHelper.GenerateToken(user.Username, user.Role.ToString());
+            var token = _jwtHelper.GenerateToken(user.Id.ToString(), user.Role.ToString());
 
             if (string.IsNullOrEmpty(token))
                 return Unauthorized();

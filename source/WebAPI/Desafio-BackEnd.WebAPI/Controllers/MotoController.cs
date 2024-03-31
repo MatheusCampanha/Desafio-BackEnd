@@ -6,6 +6,7 @@ using Desafio_BackEnd.Domain.Motos.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Numerics;
 
 namespace Desafio_BackEnd.WebAPI.Controllers
 {
@@ -23,6 +24,19 @@ namespace Desafio_BackEnd.WebAPI.Controllers
         public async Task<IActionResult> GetAll(string? placa)
         {
             var result = await _motoRepository.GetResult(placa);
+
+            if (result.Count > 0)
+                return Ok(result);
+            else
+                return NotFound();
+        }
+
+        [HttpGet]
+        [Route("motos/disponiveis")]
+        [ProducesResponseType((int)HttpStatusCode.PartialContent, Type = typeof(List<MotoDTO>))]
+        public async Task<IActionResult> GetAvaiable()
+        {
+            var result = await _motoRepository.GetAvaiable();
 
             if (result.Count > 0)
                 return Ok(result);

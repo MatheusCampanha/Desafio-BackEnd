@@ -10,6 +10,7 @@
                 <th>Ano</th>
                 <th>Modelo</th>
                 <th>Placa</th>
+                <th>Alugada</th>
                 <th>Ações</th>
             </tr>
         </thead>
@@ -21,6 +22,7 @@
                     <td>@moto.Ano</td>
                     <td>@moto.Modelo</td>
                     <td>@moto.Placa</td>
+                    <td>@(moto.Alugada ? "Sim" : "Não")</td>
                     <td>
                         @Html.ActionLink("Editar", "Edit", new { id = moto.Id, placa = moto.Placa }, new { @class = "btn btn-primary" })
                         <button class="btn btn-danger" onclick="deleteMoto('@moto.Id')">Excluir</button>

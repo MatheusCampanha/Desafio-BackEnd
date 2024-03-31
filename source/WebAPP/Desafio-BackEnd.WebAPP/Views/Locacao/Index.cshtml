@@ -1,4 +1,221 @@
-﻿@page
-@model Desafio_BackEnd.WebAPP.Views.Locacao.IndexModel
+﻿@using Desafio_BackEnd.WebAPP.Models.Entregador
+@model EntregadorViewModel
 @{
+    ViewData["Title"] = "Aluguel de Motos";
+}
+
+<h1>Aluguel de Motos</h1>
+
+<form enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="DataInicial">Data Inicial:</label>
+        <input type="date" id="DataInicial" name="DataInicial" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="DataFinal">Data Final:</label>
+        <input disabled type="date" id="DataFinal" name="DataFinal" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="DataPrevisaoEntrega">Data Previsão de Entrega:</label>
+        <input type="date" id="DataPrevisaoEntrega" name="DataPrevisaoEntrega" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="plan">Plano:</label>
+        <select id="plan" name="plan" required>
+            <option value="7">7 dias - R$30,00/dia</option>
+            <option value="15">15 dias - R$28,00/dia</option>
+            <option value="30">30 dias - R$22,00/dia</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="ValorTotal">Valor:</label>
+        <input disabled type="text" id="ValorTotal" name="ValorTotal" class="form-control" />
+    </div>
+
+    <button type="button" id="btnConfirm" class="btn btn-primary">Confirmar</button>
+</form>
+
+<div id="tableContainer" hidden>
+    <table class="table" id="motosTable">
+        <thead class="thead-dark">
+            <tr>
+                <th style="display:none;">Id</th>
+                <th>Ano</th>
+                <th>Modelo</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+@if (!string.IsNullOrEmpty(@Context.Request.Query["error"]))
+{
+    <div class="alert alert-danger">@Context.Request.Query["error"]</div>
+}
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).on("click", ".alugar", function () {
+            var motoId = $(this).data("id");
+            var valorTotalDecimal = parseFloat($("#ValorTotal").val().replace(',', '.'));
+            var formData = new FormData();
+
+            formData.append('EntregadorId', '@Model.Id');
+            formData.append('MotoId', motoId);
+            formData.append('DataInicial', $("#DataInicial").val());
+            formData.append('DataFinal', $("#DataFinal").val());
+            formData.append('DataPrevisaoEntrega', $("#DataPrevisaoEntrega").val());
+            formData.append('ValorTotal', valorTotalDecimal);
+
+            $.ajax({
+                url: '@Url.Action("Rent", "Locacao")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false
+            });
+        });
+
+        $("#DataInicial, #plan").change(function () {
+            var dataFinal = addDays();
+            $("#DataFinal").val(dataFinal);
+            $("#DataPrevisaoEntrega").val(dataFinal);
+
+            calculateTotal();
+        });
+
+        $("#DataPrevisaoEntrega").change(function () {
+            calculateTotal();
+        });
+
+        function addDays() {
+            var dataInicio = $("#DataInicial").val();
+
+            if (dataInicio === ""){
+                dataInicio = new Date();
+                $("#DataInicial").val(dataInicio.toISOString().split('T')[0]);
+            }
+
+            var diasPlano = parseInt($("#plan").val());
+            var data = new Date(dataInicio);
+
+            data.setDate(data.getDate() + diasPlano);
+
+            var novaData = data.toISOString().split('T')[0];
+
+            return novaData;
+        }
+
+        function calculateTotal() {
+            var dataInicio = new Date($("#DataInicial").val());
+            var dataFinal = new Date($("#DataFinal").val());
+            var dataPrevisaoEntrega = new Date($("#DataPrevisaoEntrega").val());
+            var plano = parseInt($("#plan").val());
+
+            var valorDiaria;
+            var valorTotal;
+
+            if (dataPrevisaoEntrega < dataFinal) {
+                var diasAlugados = Math.ceil((dataPrevisaoEntrega - dataInicio) / (1000 * 60 * 60 * 24));
+                var diasRestantes = plano - diasAlugados;
+                var valorMulta;
+
+                switch (plano) {
+                    case 7:
+                        valorDiaria = 30;
+                        valorMulta = 0.2 * (valorDiaria * diasRestantes);
+                        break;
+                    case 15:
+                        valorDiaria = 28;
+                        valorMulta = 0.4 * (valorDiaria * diasRestantes);
+                        break;
+                    case 30:
+                        valorDiaria = 22;
+                        valorMulta = 0.6 * (valorDiaria * diasRestantes);
+                        break;
+                    default:
+                        valorMulta = 0;
+                }
+
+                valorTotal = (plano * valorDiaria) + valorMulta;
+            }
+            else {
+                switch (plano) {
+                    case 7:
+                        valorTotal = plano * 30;
+                        break;
+                    case 15:
+                        valorTotal = plano * 28;
+                        break;
+                    case 30:
+                        valorTotal = plano * 22;
+                        break;
+                    default:
+                        valorTotal = 0;
+                }
+
+                if (dataPrevisaoEntrega > dataFinal) {
+                    var diasAlugados = Math.ceil((dataPrevisaoEntrega - dataInicio) / (1000 * 60 * 60 * 24));
+                    var diasExcedentes = diasAlugados - plano;
+                    var valorMulta = 50 * diasExcedentes;
+
+                    valorTotal += valorMulta;
+                }
+            }
+
+            $("#ValorTotal").val(valorTotal.toFixed(2));
+        }
+
+        $("#btnConfirm").click(function () {
+            if (!validate())
+                return;
+
+            buscarMoto();
+        });
+
+        function buscarMoto() {
+            $.ajax({
+                url: '@Url.Action("MotosAvaiable", "Moto")',
+                type: 'GET',
+                success: function (result) {
+                    if (result.length == 0) {
+                        alert("Nenhuma moto disponível para o período selecionado.");
+                    }
+                    else {
+                        $("#tableContainer").attr("hidden", false);
+                        $("#motosTable tbody").empty();
+                        $.each(result, function (index, moto) {
+                            var row = "<tr>" +
+                                "<td style='display:none;'>" + moto.id + "</td>" +
+                                "<td>" + moto.modelo + "</td>" +
+                                "<td>" + moto.ano + "</td>" +
+                                "<td>" +
+                                "<button class='btn btn-primary alugar' data-id='" + moto.id + "'>Alugar</button>" +
+                                "</td>" +
+                                "</tr>";
+                            $("#motosTable tbody").append(row);
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert('Erro ao buscar moto: ' + error);
+                }
+            });
+        }
+
+        function validate() {
+            if ("@Model.TipoCNH" !== "A"){
+                alert("Somente CNH com categoria A pode fazer locação.");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
 }

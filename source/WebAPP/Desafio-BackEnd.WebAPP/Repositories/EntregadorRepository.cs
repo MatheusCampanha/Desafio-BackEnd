@@ -68,7 +68,7 @@ namespace Desafio_BackEnd.WebAPP.Repositories
             }
         }
 
-        public async Task<EditViewModel> GetById(string id, string token)
+        public async Task<EntregadorViewModel> GetById(string id, string token)
         {
             using var httpClient = new HttpClient();
 
@@ -79,12 +79,7 @@ namespace Desafio_BackEnd.WebAPP.Repositories
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<EntregadorDTO>(json)!;
-                return new EditViewModel{
-                    Id = result.Id,
-                    Nome = result.Nome,
-                    CaminhoImagem = result.CaminhoImagemCNH
-                };
+                return JsonConvert.DeserializeObject<EntregadorViewModel>(json)!;
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {

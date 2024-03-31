@@ -41,6 +41,32 @@ namespace Desafio_BackEnd.WebAPP.Repositories
             }
         }
 
+        public async Task<List<MotoViewModel>> GetAvaiable(string token)
+        {
+            using var httpClient = new HttpClient();
+
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await httpClient.GetAsync($"{_baseURL}/motos/disponiveis");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<List<MotoViewModel>>(json)!;
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return [];
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                var errorMessage = $"Status code: {response.StatusCode}, Error: {errorContent}";
+
+                throw new ApplicationException(errorMessage);
+            }
+        }
+
         public async Task DeleteMoto(string id, string token)
         {
             using var httpClient = new HttpClient();

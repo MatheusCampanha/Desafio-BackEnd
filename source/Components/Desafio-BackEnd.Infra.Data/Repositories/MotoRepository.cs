@@ -6,6 +6,7 @@ using Desafio_BackEnd.Domain.Motos.DTO;
 using Desafio_BackEnd.Domain.Motos.Interfaces.Repositories;
 using MongoDB.Driver;
 using System.Net;
+using System.Numerics;
 
 namespace Desafio_BackEnd.Infra.Data.Repositories
 {
@@ -26,7 +27,7 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
 
             if (result != null)
             {
-                var moto = new Moto(result.Id, result.Ano, result.Modelo, result.Placa);
+                var moto = new Moto(result.Id, result.Ano, result.Modelo, result.Placa, result.Alugada);
                 return new Result<Moto>(HttpStatusCode.OK.GetHashCode(), moto);
             }
 
@@ -39,6 +40,15 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
 
             if (!string.IsNullOrEmpty(placa))
                 filter = Builders<MotoDTO>.Filter.Eq(x => x.Placa, placa);
+
+            var motos = await _motos.Find(filter).ToListAsync();
+
+            return motos;
+        }
+
+        public async Task<List<MotoDTO>> GetAvaiable()
+        {
+            var filter = Builders<MotoDTO>.Filter.Eq(x => x.Alugada, false);
 
             var motos = await _motos.Find(filter).ToListAsync();
 
