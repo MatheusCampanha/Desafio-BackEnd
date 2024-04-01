@@ -16,12 +16,14 @@ namespace Desafio_BackEnd.Domain.Locacoes.DTO
 
         [BsonRepresentation(BsonType.Decimal128)]
         public decimal ValorTotal { get; init; }
+        public int Plano { get; init; }
+        public bool  Finalizada { get; init; }
 
-        public LocacaoDTO(Locacao locacao) : this(locacao.Id, locacao.EntregadorId, locacao.MotoId, locacao.DataInicial, locacao.DataFinal, locacao.DataPrevisaoEntrega, locacao.ValorTotal)
+        public LocacaoDTO(Locacao locacao) : this(locacao.Id, locacao.EntregadorId, locacao.MotoId, locacao.DataInicial, locacao.DataFinal, locacao.DataPrevisaoEntrega, locacao.ValorTotal, locacao.Plano, locacao.Finalizada)
         {
         }
 
-        public LocacaoDTO(string id, string entregadorId, string motoId, DateTime dataInicial, DateTime dataFinal, DateTime dataPrevisaoEntrega, decimal valorTotal)
+        public LocacaoDTO(string id, string entregadorId, string motoId, DateTime dataInicial, DateTime dataFinal, DateTime dataPrevisaoEntrega, decimal valorTotal, int plano, bool finalizada)
         {
             Id = id;
             EntregadorId = entregadorId;
@@ -30,6 +32,8 @@ namespace Desafio_BackEnd.Domain.Locacoes.DTO
             DataFinal = dataFinal;
             DataPrevisaoEntrega = dataPrevisaoEntrega;
             ValorTotal = valorTotal;
+            Plano = plano;
+            Finalizada = finalizada;
         }
     }
 }

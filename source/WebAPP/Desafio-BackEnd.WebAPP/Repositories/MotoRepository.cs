@@ -41,14 +41,13 @@ namespace Desafio_BackEnd.WebAPP.Repositories
             }
         }
 
-        public async Task<List<MotoViewModel>> GetAvaiable(string token, DateTime dataInicio)
+        public async Task<List<MotoViewModel>> GetAvaiable(string token)
         {
             using var httpClient = new HttpClient();
 
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            string dataInicioFormatted = dataInicio.ToString("yyyy-MM-ddTHH:mm:ss");
 
-            var response = await httpClient.GetAsync($"{_baseURL}/motos/disponiveis?dataInicio={dataInicioFormatted}");
+            var response = await httpClient.GetAsync($"{_baseURL}/motos/disponiveis");
 
             if (response.IsSuccessStatusCode)
             {

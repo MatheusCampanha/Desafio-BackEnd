@@ -1,4 +1,5 @@
-﻿using Desafio_BackEnd.WebAPP.Interfaces;
+﻿using Desafio_BackEnd.WebAPP.Configurations.Filters;
+using Desafio_BackEnd.WebAPP.Interfaces;
 using Desafio_BackEnd.WebAPP.Models.Entregador;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,43 +19,41 @@ namespace Desafio_BackEnd.WebAPP.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit(string entregadorId)
+        [JwtAuthorizationFilter]
+        public async Task<IActionResult> Edit(string token, string entregadorId)
         {
-            var token = HttpContext.Session.GetString("JWTToken");
-            if (!string.IsNullOrEmpty(token))
-            {
-                var entregador = await _entregadorRepository.GetById(entregadorId, token);
-                return View(entregador);
-            }
-
-            return BadRequest("Token inválido");
+            var entregador = await _entregadorRepository.GetById(entregadorId, token);
+            return View(entregador);
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetEntregadores()
+        [JwtAuthorizationFilter]
+        public async Task<ActionResult> GetEntregadores(string token)
         {
-            var token = HttpContext.Session.GetString("JWTToken");
-            if (!string.IsNullOrEmpty(token))
-            {
-                List<EntregadorViewModel> result = await _entregadorRepository.GetAll(token);
-                return PartialView("_EntregadoresTablePartial", result);
-            }
+            List<EntregadorViewModel> result = await _entregadorRepository.GetAll(token);
+            return PartialView("_EntregadoresTablePartial", result);
+        }
 
-            return BadRequest("Token inválido");
+        [HttpGet]
+        [JwtAuthorizationFilter]
+        public async Task<ActionResult> EntregadorCanRate(string token, string entregadorId)
+        {
+            var entregador = await _entregadorRepository.GetById(entregadorId, token);
+            if (entregador.TipoCNH.Equals("A"))
+                return Json(true);
+            else
+                return Json(false);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] CreateEntregadorViewModel model)
+        [JwtAuthorizationFilter]
+        public async Task<IActionResult> Create(string token, [FromForm] CreateEntregadorViewModel model)
         {
             try
             {
-                var token = HttpContext.Session.GetString("JWTToken");
-                if (!string.IsNullOrEmpty(token))
-                {
-                    await _entregadorRepository.Create(model, token);
-                }
+                await _entregadorRepository.Create(model, token);
 
-                return RedirectToAction("Index", "Home"); // Redireciona para a página inicial
+                return RedirectToAction("Index", "Home");
             }
             catch (Exception)
             {

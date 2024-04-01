@@ -22,9 +22,9 @@ namespace Desafio_BackEnd.WebAPP.Controllers
         }
 
         [JwtAuthorizationFilter]
-        public async Task<ActionResult> MotosAvaiable(string token, DateTime dataInicio)
+        public async Task<ActionResult> MotosAvaiable(string token)
         {
-            var result = await _motoRepository.GetAvaiable(token, dataInicio);
+            var result = await _motoRepository.GetAvaiable(token);
             return Json(result);
         }
 

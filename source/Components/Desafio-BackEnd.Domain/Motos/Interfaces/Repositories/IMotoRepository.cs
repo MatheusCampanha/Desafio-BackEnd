@@ -9,7 +9,7 @@ namespace Desafio_BackEnd.Domain.Motos.Interfaces.Repositories
         Task<Result<Moto>> GetById(string id);
 
         Task<List<MotoDTO>> GetResult(string? placa);
-        Task<List<MotoDTO>> GetAvaiable(DateTime dataInicio);
+        Task<List<MotoDTO>> GetAvaiable();
 
         Task<Result<MotoDTO>> Insert(MotoDTO moto);
 

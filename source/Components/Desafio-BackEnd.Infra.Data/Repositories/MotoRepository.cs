@@ -49,15 +49,9 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
             return motos;
         }
 
-        public async Task<List<MotoDTO>> GetAvaiable(DateTime dataInicio)
+        public async Task<List<MotoDTO>> GetAvaiable()
         {
-            var locacoes = await _locacoes.Find(loc => loc.DataPrevisaoEntrega < dataInicio).ToListAsync();
-            var locacaoIds = locacoes.Select(loc => loc.MotoId);
-
-            var filter = Builders<MotoDTO>.Filter.And(
-                Builders<MotoDTO>.Filter.Eq(x => x.Alugada, false),
-                Builders<MotoDTO>.Filter.Not(Builders<MotoDTO>.Filter.In(x => x.Id, locacaoIds))
-            );
+            var filter = Builders<MotoDTO>.Filter.Eq(x => x.Alugada, false);
 
             var motos = await _motos.Find(filter).ToListAsync();
 

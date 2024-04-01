@@ -4,7 +4,7 @@ namespace Desafio_BackEnd.Domain.Locacoes
 {
     public class Locacao : Entity
     {
-        public Locacao(string? id, string entregadorId, string motoId, DateTime dataInicial, DateTime dataFinal, DateTime dataPrevisaoEntrega, decimal valorTotal)
+        public Locacao(string? id, string entregadorId, string motoId, DateTime dataInicial, DateTime dataFinal, DateTime dataPrevisaoEntrega, decimal valorTotal, int plano, bool finalizada)
         {
             SetId(id);
             SetEntregadorId(entregadorId);
@@ -13,9 +13,11 @@ namespace Desafio_BackEnd.Domain.Locacoes
             SetDataFinal(dataFinal);
             SetDataPrevisaoEntrega(dataPrevisaoEntrega);
             SetValorTotal(valorTotal);
+            SetPlano(plano);
+            SetFinalizada(finalizada);
         }
 
-        public Locacao(string entregadorId, string motoId, DateTime dataInicial, DateTime dataFinal, DateTime dataPrevisaoEntrega, decimal valorTotal)
+        public Locacao(string entregadorId, string motoId, DateTime dataInicial, DateTime dataFinal, DateTime dataPrevisaoEntrega, decimal valorTotal, int plano, bool finalizada)
         {
             SetEntregadorId(entregadorId);
             SetMotoId(motoId);
@@ -23,6 +25,8 @@ namespace Desafio_BackEnd.Domain.Locacoes
             SetDataFinal(dataFinal);
             SetDataPrevisaoEntrega(dataPrevisaoEntrega);
             SetValorTotal(valorTotal);
+            SetPlano(plano);
+            SetFinalizada(finalizada);
         }
 
         public string? Id { get; private set; }
@@ -32,6 +36,8 @@ namespace Desafio_BackEnd.Domain.Locacoes
         public DateTime DataFinal { get; set; }
         public DateTime DataPrevisaoEntrega { get; set; }
         public decimal ValorTotal { get; set; }
+        public int Plano { get; set; }
+        public bool Finalizada { get; set; }
 
         public void SetId(string? id)
         {
@@ -73,6 +79,18 @@ namespace Desafio_BackEnd.Domain.Locacoes
         {
             if (Valid)
                 ValorTotal = valorTotal;
+        }
+
+        public void SetPlano(int plano)
+        {
+            if (Valid)
+                Plano = plano;
+        }
+
+        public void SetFinalizada(bool finalizada)
+        {
+            if (Valid)
+                Finalizada = finalizada;
         }
     }
 }

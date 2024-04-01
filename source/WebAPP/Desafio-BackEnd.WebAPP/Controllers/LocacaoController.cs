@@ -18,7 +18,11 @@ namespace Desafio_BackEnd.WebAPP.Controllers
             var userId = GetUserId(token);
             userId = "66062139c16619a6c5252c0f";
             var entregador = await _entregadorRepository.GetById(userId, token);
-            return View(entregador);
+            var locacaoAtiva = await _locacaoRepository.GetActive(entregador.Id, token);
+            if (locacaoAtiva != null)
+                return View(locacaoAtiva);
+            else
+                return View(new LocacaoViewModel { EntregadorId = entregador.Id });
         }
 
         [JwtAuthorizationFilter]
@@ -33,6 +37,12 @@ namespace Desafio_BackEnd.WebAPP.Controllers
             {
                 return Json(new { status = "Error", message = "Falha ao realizar confirmada!" });
             }
+        }
+
+        [JwtAuthorizationFilter]
+        public async void EndRent(string token, string id)
+        {
+            await _locacaoRepository.EndRate(id, token);
         }
 
         private static string GetUserId(string? jwtToken)

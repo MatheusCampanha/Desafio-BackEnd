@@ -39,7 +39,7 @@ namespace Desafio_BackEnd.Domain.Locacoes.Handlers
                 return errorResult;
             }
 
-            var locacao = new Locacao(command.EntregadorId, command.MotoId, command.DataInicial, command.DataFinal, command.DataPrevisaoEntrega, command.ValorTotal);
+            var locacao = new Locacao(command.EntregadorId, command.MotoId, command.DataInicial, command.DataFinal, command.DataPrevisaoEntrega, command.ValorTotal, command.Plano, command.Finalizada);
 
             if (locacao.Invalid)
             {
