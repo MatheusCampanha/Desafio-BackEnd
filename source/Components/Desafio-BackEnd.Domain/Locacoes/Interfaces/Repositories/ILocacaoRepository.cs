@@ -7,6 +7,7 @@ namespace Desafio_BackEnd.Domain.Locacoes.Interfaces.Repositories
     {
         Task<Result<LocacaoDTO>> Insert(LocacaoDTO locacao);
         Task EndRate(string id);
-        Task<LocacaoDTO> GetActive(string id);
+        Task<LocacaoDTO> IsActive(string id);
+        Task<List<LocacaoDTO>> GetAllActives();
     }
 }

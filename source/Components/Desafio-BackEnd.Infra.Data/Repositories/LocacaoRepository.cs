@@ -27,9 +27,16 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
             await _locacoes.UpdateOneAsync(filter, update);
         }
 
-        public async Task<LocacaoDTO> GetActive(string id)
+        public async Task<LocacaoDTO> IsActive(string id)
         {
             var result = await _locacoes.Find(x => x.EntregadorId.Equals(id) && !x.Finalizada).FirstOrDefaultAsync();
+
+            return result;
+        }
+
+        public async Task<List<LocacaoDTO>> GetAllActives()
+        {
+            var result = await _locacoes.Find(x => !x.Finalizada).ToListAsync();
 
             return result;
         }

@@ -10,6 +10,7 @@ namespace Desafio_BackEnd.Domain.Entregadores.Interfaces.Repositories
         Task<Result<Entregador>> GetById(string id);
 
         Task<List<EntregadorDTO>> GetAll();
+        Task<List<string>> GetAvaiable();
 
         Task<EntregadorDTO> GetByIdResult(string id);
 

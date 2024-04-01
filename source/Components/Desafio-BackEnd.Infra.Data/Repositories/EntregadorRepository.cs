@@ -4,6 +4,8 @@ using Desafio_BackEnd.Domain.Core.Results;
 using Desafio_BackEnd.Domain.Entregadores;
 using Desafio_BackEnd.Domain.Entregadores.DTO;
 using Desafio_BackEnd.Domain.Entregadores.Interfaces.Repositories;
+using Desafio_BackEnd.Domain.Locacoes.DTO;
+using Desafio_BackEnd.Domain.Pedidos.DTO;
 using Microsoft.AspNetCore.Http;
 using MongoDB.Driver;
 using System.Net;
@@ -12,10 +14,13 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
 {
     public class EntregadorRepository : IEntregadorRepository
     {
+        private readonly Settings _settings;
         private readonly IMongoCollection<EntregadorDTO> _entregadores;
 
         public EntregadorRepository(Settings settings)
         {
+            _settings = settings;
+
             var client = new MongoClient(settings.ConnectionStrings.DBApplication);
             var database = client.GetDatabase(settings.ConnectionStrings.DatabaseName);
             _entregadores = database.GetCollection<EntregadorDTO>("Entregador");
@@ -39,6 +44,25 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
             var entregadores = await _entregadores.Find(_ => true).ToListAsync();
 
             return entregadores;
+        }
+
+        public async Task<List<string>> GetAvaiable()
+        {
+            var locacaoRepository = new LocacaoRepository(_settings);
+            var locacoesAtivas = await locacaoRepository.GetAllActives();
+            var entregadoresComlocacoes = locacoesAtivas.Select(x => x.EntregadorId).ToList();
+
+            var client = new MongoClient(_settings.ConnectionStrings.DBApplication);
+            var database = client.GetDatabase(_settings.ConnectionStrings.DatabaseName);
+            var pedidos = database.GetCollection<PedidoDTO>("Pedido");
+
+            var filter = Builders<PedidoDTO>.Filter.In(p => p.EntregadorId, entregadoresComlocacoes) &
+                         Builders<PedidoDTO>.Filter.Eq(p => p.Situacao, "Aceito");
+
+            var pedidosAceitos = pedidos.Find(filter).ToList();
+            var entregadoresAceitos = new HashSet<string>(pedidosAceitos.Select(p => p.EntregadorId));
+
+            return entregadoresComlocacoes.Where(id => !entregadoresAceitos.Contains(id)).ToList();
         }
 
         public async Task<EntregadorDTO> GetByIdResult(string id)

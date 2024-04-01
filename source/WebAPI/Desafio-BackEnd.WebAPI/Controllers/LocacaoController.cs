@@ -35,9 +35,9 @@ namespace Desafio_BackEnd.WebAPI.Controllers
         [HttpGet]
         [Route("locacoes/entregador/{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(LocacaoDTO))]
-        public async Task<IActionResult> GetActive(string id)
+        public async Task<IActionResult> IsActive(string id)
         {
-            var result = await _locacaoRepository.GetActive(id);
+            var result = await _locacaoRepository.IsActive(id);
             if (result != null)
                 return Ok(result);
             else
