@@ -1,5 +1,4 @@
-﻿using Amazon.S3;
-using Desafio_BackEnd.Domain.Entregadores.Handlers;
+﻿using Desafio_BackEnd.Domain.Entregadores.Handlers;
 using Desafio_BackEnd.Domain.Entregadores.Interfaces.Handlers;
 using Desafio_BackEnd.Domain.Entregadores.Interfaces.Repositories;
 using Desafio_BackEnd.Domain.Locacoes.Handlers;
@@ -8,6 +7,9 @@ using Desafio_BackEnd.Domain.Locacoes.Interfaces.Repositories;
 using Desafio_BackEnd.Domain.Motos.Handlers;
 using Desafio_BackEnd.Domain.Motos.Interfaces.Handlers;
 using Desafio_BackEnd.Domain.Motos.Interfaces.Repositories;
+using Desafio_BackEnd.Domain.Pedidos.Handlers;
+using Desafio_BackEnd.Domain.Pedidos.Interfaces.Handlers;
+using Desafio_BackEnd.Domain.Pedidos.Interfaces.Repositories;
 using Desafio_BackEnd.Domain.Users.Handlers;
 using Desafio_BackEnd.Domain.Users.Interfaces.Handlers;
 using Desafio_BackEnd.Domain.Users.Interfaces.Repositories;
@@ -25,8 +27,6 @@ namespace Desafio_BackEnd.Infra.CrossCutting
 
             services.AddScoped<IJwtHelper, JwtHelper>();
 
-            services.AddAWSService<IAmazonS3>();
-
             #endregion Helpers
 
             #region Handlers
@@ -34,6 +34,7 @@ namespace Desafio_BackEnd.Infra.CrossCutting
             services.AddScoped<IEntregadorHandler, EntregadorHandler>();
             services.AddScoped<ILocacaoHandler, LocacaoHandler>();
             services.AddScoped<IMotoHandler, MotoHandler>();
+            services.AddScoped<IPedidoHandler, PedidoHandler>();
             services.AddScoped<IUserHandler, UserHandler>();
 
             #endregion Handlers
@@ -43,6 +44,7 @@ namespace Desafio_BackEnd.Infra.CrossCutting
             services.AddScoped<IEntregadorRepository, EntregadorRepository>();
             services.AddScoped<ILocacaoRepository, LocacaoRepository>();
             services.AddScoped<IMotoRepository, MotoRepository>();
+            services.AddScoped<IPedidoRepository, PedidoRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
 
             #endregion Repositories

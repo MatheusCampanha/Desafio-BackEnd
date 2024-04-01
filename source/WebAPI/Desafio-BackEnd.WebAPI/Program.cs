@@ -16,7 +16,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 var settings = builder.Configuration.GetSection("Settings").Get<Settings>();
 builder.Services.AddSingleton(settings!);
-builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
 builder.Services.AddServices();
 
 #endregion Injecao de Dependecia
