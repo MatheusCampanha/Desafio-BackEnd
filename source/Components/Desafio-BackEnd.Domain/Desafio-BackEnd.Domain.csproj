@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Desafio-BackEnd.Domain.Core\Desafio-BackEnd.Domain.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Notificacoes\Interfaces\Handlers\" />
+  </ItemGroup>
+
 </Project>
