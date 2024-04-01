@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Desafio_BackEnd.Domain.Core.Results;
+using Desafio_BackEnd.Domain.Notificacoes.DTO;
 
 namespace Desafio_BackEnd.Domain.Notificacoes.Interfaces.Repositories
 {
-    internal interface INotificacaoRepository
+    public interface INotificacaoRepository
     {
+        Task<Result<NotificacaoDTO>> Create(NotificacaoDTO notificao);
+
+        Task<List<NotificacaoDTO>> GetAll();
     }
 }

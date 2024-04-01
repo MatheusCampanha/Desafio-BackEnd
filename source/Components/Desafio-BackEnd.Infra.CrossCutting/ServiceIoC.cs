@@ -7,6 +7,9 @@ using Desafio_BackEnd.Domain.Locacoes.Interfaces.Repositories;
 using Desafio_BackEnd.Domain.Motos.Handlers;
 using Desafio_BackEnd.Domain.Motos.Interfaces.Handlers;
 using Desafio_BackEnd.Domain.Motos.Interfaces.Repositories;
+using Desafio_BackEnd.Domain.Notificacoes.Handlers;
+using Desafio_BackEnd.Domain.Notificacoes.Interfaces.Handlers;
+using Desafio_BackEnd.Domain.Notificacoes.Interfaces.Repositories;
 using Desafio_BackEnd.Domain.Pedidos.Handlers;
 using Desafio_BackEnd.Domain.Pedidos.Interfaces.Handlers;
 using Desafio_BackEnd.Domain.Pedidos.Interfaces.Repositories;
@@ -34,6 +37,7 @@ namespace Desafio_BackEnd.Infra.CrossCutting
             services.AddScoped<IEntregadorHandler, EntregadorHandler>();
             services.AddScoped<ILocacaoHandler, LocacaoHandler>();
             services.AddScoped<IMotoHandler, MotoHandler>();
+            services.AddScoped<INotificacaoHandler, NotificacaoHandler>();
             services.AddScoped<IPedidoHandler, PedidoHandler>();
             services.AddScoped<IUserHandler, UserHandler>();
 
@@ -44,6 +48,7 @@ namespace Desafio_BackEnd.Infra.CrossCutting
             services.AddScoped<IEntregadorRepository, EntregadorRepository>();
             services.AddScoped<ILocacaoRepository, LocacaoRepository>();
             services.AddScoped<IMotoRepository, MotoRepository>();
+            services.AddScoped<INotificacaoRepository, NotificacaoRepository>();
             services.AddScoped<IPedidoRepository, PedidoRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
 
