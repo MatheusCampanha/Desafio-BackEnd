@@ -1,5 +1,4 @@
 ﻿using Desafio_BackEnd.Domain.Core.Commands;
-using Desafio_BackEnd.Domain.Core.Enums;
 using Desafio_BackEnd.Domain.Core.Results;
 using Desafio_BackEnd.Domain.Pedidos.Commands;
 using Desafio_BackEnd.Domain.Pedidos.DTO;

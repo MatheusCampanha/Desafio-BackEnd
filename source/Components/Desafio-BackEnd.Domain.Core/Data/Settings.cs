@@ -8,6 +8,7 @@
         public string Token { get; set; } = default!;
 
         public ConnectionStrings ConnectionStrings { get; set; } = default!;
+        public RabbitMQConfigurations RabbitMQConfigurations { get; set; } = default!;
         public Jwt Jwt { get; set; } = default!;
         public S3Settings S3Settings { get; set; } = default!;
     }
@@ -16,6 +17,15 @@
     {
         public string DBApplication { get; set; } = default!;
         public string DatabaseName { get; set; } = default!;
+    }
+
+    public class RabbitMQConfigurations
+    {
+        public string Url { get; set; } = default!;
+        public int Port { get; set; }
+        public string UserName { get; set; } = default!;
+        public string Password { get; set; } = default!;
+        public string RoutingKey { get; set; } = default!;
     }
 
     public class Jwt

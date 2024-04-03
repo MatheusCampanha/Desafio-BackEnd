@@ -16,6 +16,7 @@ namespace Desafio_BackEnd.Domain.Pedidos.Interfaces.Repositories
         Task<Result<Pedido>> GetById(string id);
 
         Task<List<PedidoDTO>> GetResult();
+        Task<List<PedidoDTO>> GetUnfinished();
 
         Task<Result<PedidoDTO>> Insert(PedidoDTO pedido);
 

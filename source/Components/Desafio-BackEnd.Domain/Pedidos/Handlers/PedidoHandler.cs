@@ -1,17 +1,13 @@
 ﻿using Desafio_BackEnd.Domain.Core.Commands;
-using Desafio_BackEnd.Domain.Core.Enums;
+using Desafio_BackEnd.Domain.Core.Data;
 using Desafio_BackEnd.Domain.Core.Results;
 using Desafio_BackEnd.Domain.Entregadores.Interfaces.Repositories;
 using Desafio_BackEnd.Domain.Pedidos.Commands;
 using Desafio_BackEnd.Domain.Pedidos.DTO;
+using Desafio_BackEnd.Domain.Pedidos.Event;
 using Desafio_BackEnd.Domain.Pedidos.Interfaces.Handlers;
 using Desafio_BackEnd.Domain.Pedidos.Interfaces.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Desafio_BackEnd.Domain.Pedidos.Handlers
 {

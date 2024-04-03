@@ -1,14 +1,13 @@
 ﻿using Desafio_BackEnd.Domain.Entregadores.Handlers;
 using Desafio_BackEnd.Domain.Entregadores.Interfaces.Handlers;
 using Desafio_BackEnd.Domain.Entregadores.Interfaces.Repositories;
+using Desafio_BackEnd.Domain.HFS;
 using Desafio_BackEnd.Domain.Locacoes.Handlers;
 using Desafio_BackEnd.Domain.Locacoes.Interfaces.Handlers;
 using Desafio_BackEnd.Domain.Locacoes.Interfaces.Repositories;
 using Desafio_BackEnd.Domain.Motos.Handlers;
 using Desafio_BackEnd.Domain.Motos.Interfaces.Handlers;
 using Desafio_BackEnd.Domain.Motos.Interfaces.Repositories;
-using Desafio_BackEnd.Domain.Notificacoes.Handlers;
-using Desafio_BackEnd.Domain.Notificacoes.Interfaces.Handlers;
 using Desafio_BackEnd.Domain.Notificacoes.Interfaces.Repositories;
 using Desafio_BackEnd.Domain.Pedidos.Handlers;
 using Desafio_BackEnd.Domain.Pedidos.Interfaces.Handlers;
@@ -26,6 +25,8 @@ namespace Desafio_BackEnd.Infra.CrossCutting
     {
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
+            services.AddScoped<HangfireJob>();
+
             #region Helpers
 
             services.AddScoped<IJwtHelper, JwtHelper>();
@@ -37,8 +38,8 @@ namespace Desafio_BackEnd.Infra.CrossCutting
             services.AddScoped<IEntregadorHandler, EntregadorHandler>();
             services.AddScoped<ILocacaoHandler, LocacaoHandler>();
             services.AddScoped<IMotoHandler, MotoHandler>();
-            services.AddScoped<INotificacaoHandler, NotificacaoHandler>();
             services.AddScoped<IPedidoHandler, PedidoHandler>();
+            services.AddScoped<IPedidoEventHandler, PedidoEventHandler>();
             services.AddScoped<IUserHandler, UserHandler>();
 
             #endregion Handlers

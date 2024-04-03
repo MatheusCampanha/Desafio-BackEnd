@@ -1,6 +1,7 @@
 using Desafio_BackEnd.Domain.Core.Data;
 using Desafio_BackEnd.Infra.CrossCutting;
 using Desafio_BackEnd.WebAPI.Configurations;
+using Desafio_BackEnd.WebAPI.Configurations.HangFire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.IdentityModel.Tokens;
@@ -19,6 +20,8 @@ builder.Services.AddSingleton(settings!);
 builder.Services.AddServices();
 
 #endregion Injecao de Dependecia
+
+builder.Services.AddHangfireSetup();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
@@ -82,6 +85,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseCors("AllowAll");
+
+app.UseHangFireSetup();
 
 app.MapControllers();
 

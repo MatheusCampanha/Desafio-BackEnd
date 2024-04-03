@@ -48,21 +48,66 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
 
         public async Task<List<string>> GetAvaiable()
         {
+            var entregadores = await _entregadores.Find(x => x.TipoCNH.Equals("A")).ToListAsync();
+
+            if (entregadores.Count == 0)
+                return [];
+
             var locacaoRepository = new LocacaoRepository(_settings);
             var locacoesAtivas = await locacaoRepository.GetAllActives();
-            var entregadoresComlocacoes = locacoesAtivas.Select(x => x.EntregadorId).ToList();
 
-            var client = new MongoClient(_settings.ConnectionStrings.DBApplication);
-            var database = client.GetDatabase(_settings.ConnectionStrings.DatabaseName);
-            var pedidos = database.GetCollection<PedidoDTO>("Pedido");
+            var entregadoresComLocacao = new List<string>();
+            foreach (var entregador in entregadores)
+            {
+                if (locacoesAtivas.Any(l => l.EntregadorId == entregador.Id))
+                    entregadoresComLocacao.Add(entregador.Id);
+            }
 
-            var filter = Builders<PedidoDTO>.Filter.In(p => p.EntregadorId, entregadoresComlocacoes) &
-                         Builders<PedidoDTO>.Filter.Eq(p => p.Situacao, "Aceito");
+            if (entregadoresComLocacao.Count == 0)
+                return [];
 
-            var pedidosAceitos = pedidos.Find(filter).ToList();
-            var entregadoresAceitos = new HashSet<string>(pedidosAceitos.Select(p => p.EntregadorId));
+            var pedidoRepository = new PedidoRepository(_settings);
+            var pedidos = await pedidoRepository.GetUnfinished();
 
-            return entregadoresComlocacoes.Where(id => !entregadoresAceitos.Contains(id)).ToList();
+            if (pedidos.Count == 0)
+                return [];
+
+            var entregadoresDisponiveis = entregadoresComLocacao
+                .Where(e => !pedidos.Any(p => !string.IsNullOrEmpty(p.EntregadorId) && p.EntregadorId.Equals(e)))
+                .ToList();
+
+            return entregadoresDisponiveis;
+        }
+
+        private async Task<List<string>> NewMethod()
+        {
+            List<EntregadorDTO> entregadores = await _entregadores.Find(x => x.TipoCNH.Equals('A')).ToListAsync();
+
+            if (entregadores.Count == 0)
+                return [];
+
+            var locacaoRepository = new LocacaoRepository(_settings);
+            List<LocacaoDTO> locacoesAtivas = await locacaoRepository.GetAllActives();
+
+            var entregadoresComLocacao = entregadores
+                .Where(e => !locacoesAtivas.Any(l => l.EntregadorId.Equals(e.Id)))
+                .Select(e => e.Id)
+                .ToList();
+
+            if (entregadoresComLocacao.Count == 0)
+                return [];
+
+            var pedidoRepository = new PedidoRepository(_settings);
+            var pedidos = await pedidoRepository.GetResult();
+
+            if (pedidos.Count == 0)
+                return [];
+
+            var entregadoresDisponiveis = entregadoresComLocacao
+                .Where(e => !pedidos.Any(p => p.EntregadorId!.Equals(e) && p.Situacao == "Entregue"))
+                .ToList();
+
+            return entregadoresDisponiveis;
         }
 
         public async Task<EntregadorDTO> GetByIdResult(string id)

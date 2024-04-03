@@ -4,25 +4,31 @@ namespace Desafio_BackEnd.Domain.Notificacoes
 {
     public class Notificacao : Entity
     {
-        public Notificacao(string id, string pedidoId, string entregadorId, DateTime data)
+        public Notificacao(string id, string pedidoId, string entregadorId, DateTime data, decimal valor, bool lida)
         {
             SetId(id);
             SetPedidoId(pedidoId);
             SetEntregadorId(entregadorId);
             SetData(data);
+            SetValor(valor);
+            SetLida(lida);
         }
 
-        public Notificacao(string pedidoId, string entregadorId, DateTime data)
+        public Notificacao(string pedidoId, string entregadorId, DateTime data, decimal valor, bool lida)
         {
             SetPedidoId(pedidoId);
             SetEntregadorId(entregadorId);
             SetData(data);
+            SetValor(valor);
+            SetLida(lida);
         }
 
         public string Id { get; set; } = default!;
         public string PedidoId { get; set; } = default!;
         public string EntregadorId { get; set; } = default!;
         public DateTime Data { get; set; }
+        public decimal Valor { get; set; }
+        public bool Lida { get; set; }
 
         public void SetId(string id)
         {
@@ -46,6 +52,18 @@ namespace Desafio_BackEnd.Domain.Notificacoes
         {
             if (Valid)
                 Data = data;
+        }
+
+        public void SetValor(decimal valor)
+        {
+            if (Valid)
+                Valor = valor;
+        }
+
+        public void SetLida(bool lida)
+        {
+            if (Valid)
+                Lida = lida;
         }
     }
 }

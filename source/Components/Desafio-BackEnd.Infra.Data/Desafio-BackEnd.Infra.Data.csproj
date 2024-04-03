@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="AWSSDK.S3" Version="3.7.307" />
     <PackageReference Include="MongoDB.Driver" Version="2.24.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.4.1" />
   </ItemGroup>
 

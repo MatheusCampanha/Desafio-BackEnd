@@ -1,28 +1,27 @@
 ﻿using Desafio_BackEnd.Domain.Core.Commands;
 using Desafio_BackEnd.Domain.Core.Data;
 using Desafio_BackEnd.Domain.Core.Results;
-using Desafio_BackEnd.Domain.Motos;
-using Desafio_BackEnd.Domain.Motos.DTO;
 using Desafio_BackEnd.Domain.Pedidos;
 using Desafio_BackEnd.Domain.Pedidos.DTO;
+using Desafio_BackEnd.Domain.Pedidos.Event;
 using Desafio_BackEnd.Domain.Pedidos.Interfaces.Repositories;
 using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Newtonsoft.Json;
+using RabbitMQ.Client;
 using System.Net;
-using System.Numerics;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Desafio_BackEnd.Infra.Data.Repositories
 {
     public class PedidoRepository : IPedidoRepository
     {
         private readonly IMongoCollection<PedidoDTO> _pedidos;
+        private readonly Settings _settings;
 
         public PedidoRepository(Settings settings)
         {
+            _settings = settings;
+
             var client = new MongoClient(settings.ConnectionStrings.DBApplication);
             var database = client.GetDatabase(settings.ConnectionStrings.DatabaseName);
             _pedidos = database.GetCollection<PedidoDTO>("Pedido");
@@ -43,18 +42,40 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
 
         public async Task<List<PedidoDTO>> GetResult()
         {
-            var filter = Builders<PedidoDTO>.Filter.Empty;
+            var pedidos = await _pedidos.Find(_ => true).ToListAsync();
 
-            var pedidos = await _pedidos.Find(filter).ToListAsync();
+            return pedidos;
+        }
+
+        public async Task<List<PedidoDTO>> GetUnfinished()
+        {
+            var pedidos = await _pedidos.Find(x => !x.Situacao.Equals("Entregue")).ToListAsync();
 
             return pedidos;
         }
 
         public async Task<Result<PedidoDTO>> Insert(PedidoDTO pedido)
         {
-            await _pedidos.InsertOneAsync(pedido);
+            try
+            {
+                await _pedidos.InsertOneAsync(pedido);
 
-            return new Result<PedidoDTO>(HttpStatusCode.Created.GetHashCode(), pedido);
+                var entregadorRepository = new EntregadorRepository(_settings);
+                var entregadoresDisponiveis = await entregadorRepository.GetAvaiable();
+
+                foreach (var entregador in entregadoresDisponiveis)
+                {
+                    var @event = new PedidoEvent(pedido.Id, entregador, pedido.DataCriacao, pedido.Valor);
+                    SendMessage(@event);
+                }
+
+                return new Result<PedidoDTO>(HttpStatusCode.Created.GetHashCode(), pedido);
+            }
+            catch (Exception)
+            {
+                await Delete(pedido.Id);
+                throw;
+            }
         }
 
         public async Task<CommandResult> Update(PedidoDTO pedido)
@@ -75,6 +96,29 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
                 return new CommandResult(HttpStatusCode.NoContent.GetHashCode());
             else
                 return new CommandResult(HttpStatusCode.NotFound.GetHashCode());
+        }
+
+        private void SendMessage(PedidoEvent @event)
+        {
+            var factory = new ConnectionFactory()
+            {
+                Uri = new Uri(_settings.RabbitMQConfigurations.Url),
+                Port = _settings.RabbitMQConfigurations.Port,
+                UserName = _settings.RabbitMQConfigurations.UserName,
+                Password = _settings.RabbitMQConfigurations.Password
+            };
+
+            using var connection = factory.CreateConnection();
+            using var channel = connection.CreateModel();
+
+            channel.QueueDeclare(_settings.RabbitMQConfigurations.RoutingKey, false, false, false, null);
+
+            var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(@event));
+            channel.BasicPublish(
+                        exchange: string.Empty,
+                        routingKey: _settings.RabbitMQConfigurations.RoutingKey,
+                        basicProperties: null,
+                        body: body);
         }
     }
 }

@@ -1,32 +1,21 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Desafio_BackEnd.Domain.Notificacoes.DTO
 {
-    public class NotificacaoDTO
+    public class NotificacaoDTO(string id, string pedidoId, string entregadorId, DateTime data, decimal valor, bool lida)
     {
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; } = default!;
-        public string PedidoId { get; set; } = default!;
-        public string EntregadorId { get; set; } = default!;
-        public DateTime Data { get; set; }
+        public string Id { get; set; } = id;
 
-        public NotificacaoDTO(Notificacao notificacao) : this(notificacao.Id, notificacao.PedidoId, notificacao.EntregadorId, notificacao.Data)
+        public string PedidoId { get; set; } = pedidoId;
+        public string EntregadorId { get; set; } = entregadorId;
+        public DateTime Data { get; set; } = data;
+        public decimal Valor { get; set; } = valor;
+        public bool Lida { get; set; } = lida;
+
+        public NotificacaoDTO(Notificacao notificacao) : this(notificacao.Id, notificacao.PedidoId, notificacao.EntregadorId, notificacao.Data, notificacao.Valor, notificacao.Lida)
         {
-
-        }
-
-        public NotificacaoDTO(string id, string pedidoId, string entregadorId, DateTime data)
-        {
-            Id = id;
-            PedidoId = pedidoId;
-            EntregadorId = entregadorId;
-            Data = data;
         }
     }
 }
