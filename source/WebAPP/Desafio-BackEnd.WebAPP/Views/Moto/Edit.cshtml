@@ -4,26 +4,25 @@
 @{
     ViewData["Title"] = "Editar Placa";
 }
+<h1>Editar Placa</h1>
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Placa da Moto</title>
-</head>
-<body>
-    <h1>Editar Placa</h1>
+<div style="padding: 10px">
+    <form id="formMoto" enctype="multipart/form-data">
+        <div>
+            <label for="inputOldPlaca">Alterar De:</label>
+            <input type="text" id="inputOldPlaca" value="@Model.Placa" disabled>
+        </div>
 
-    <div>
-        <label for="inputOldPlaca">Alterar De:</label>
-        <input type="text" id="inputOldPlaca" value="@Model.Placa" disabled>
+        <div>
+            <label for="inputPlaca">Para:</label>
+            <input type="text" id="inputPlaca" placeholder="Digite a nova placa...">
+        </div>
 
-        <label for="inputPlaca">Para:</label>
-        <input type="text" id="inputPlaca" placeholder="Digite a nova placa...">
-        <button id="btnSalvar">Salvar</button>
-    </div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <button class="btn" id="btnSalvar">Salvar</button>
+    </form>
+</div>
+    
+@section scripts {
     <script>
         $(document).ready(function () {
             $('#btnSalvar').click(async function () {
@@ -49,5 +48,4 @@
             });
         });
     </script>
-</body>
-</html>
+}

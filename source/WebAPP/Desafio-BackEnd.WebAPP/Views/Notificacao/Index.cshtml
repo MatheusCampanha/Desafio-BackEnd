@@ -8,7 +8,7 @@
 @if (Model != null && Model.Notificacoes.Count > 0)
 {
     <table class="table">
-        <thead class="thead-dark">
+        <thead class="thead">
             <tr>
                 <th style="display:none;">Id</th>
                 <th>Pedido</th>
@@ -24,7 +24,7 @@
                 }
             </tr>
         </thead>
-        <tbody>
+        <tbody class="tbody">
             @foreach (var notificacao in Model.Notificacoes)
             {
                 <tr>

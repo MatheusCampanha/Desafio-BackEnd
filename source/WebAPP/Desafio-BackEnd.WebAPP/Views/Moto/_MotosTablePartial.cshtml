@@ -4,7 +4,7 @@
 @if (Model != null && Model.Count > 0)
 {
     <table class="table">
-        <thead class="thead-dark">
+        <thead class="thead-light">
             <tr>
                 <th style="display:none;">Id</th>
                 <th>Ano</th>
@@ -23,9 +23,9 @@
                     <td>@moto.Modelo</td>
                     <td>@moto.Placa</td>
                     <td>@(moto.Alugada ? "Sim" : "Não")</td>
-                    <td>
-                        @Html.ActionLink("Editar", "Edit", new { id = moto.Id, placa = moto.Placa }, new { @class = "btn btn-primary" })
-                        <button class="btn btn-danger" onclick="deleteMoto('@moto.Id')">Excluir</button>
+                    <td style="display: flex; width: fit-content;">
+                        @Html.ActionLink("Editar", "Edit", new { id = moto.Id, placa = moto.Placa }, new { @class = "btn" })
+                        <button class="btn" onclick="deleteMoto('@moto.Id')" style="background: #8a282b; color: #FFF; margin-left: 15px;">Excluir</button>
                     </td>
                 </tr>
             }

@@ -3,20 +3,26 @@
     ViewData["Title"] = "Login";
 }
 
-<h1>Login</h1>
+<div class="form_login">
+    <h1>Login</h1>
 
-<form method="post" action="/Login/Login">
-    <div>
-        <label for="username">Usuário:</label>
-        <input type="text" id="username" name="username" required>
-    </div>
-    <div>
-        <label for="password">Senha:</label>
-        <input type="password" id="password" name="password" required>
-    </div>
-    <button type="submit">Entrar</button>
-    <a href="/Login/Register">Registrar Novo Usuário</a>
-</form>
+    <form method="post" action="/Login/Login">
+        <div class="container">
+            <span for="username">Usuário:</span>
+            <input type="text" id="username" name="username" required>
+        </div>
+
+        <div class="container">
+            <span for="password">Senha:</span>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <div class="container_actions">
+            <button class="btn" type="submit">Entrar</button>
+            <a class="btn" href="/Login/Register">Registrar Novo Usuário</a>
+        </div>
+    </form>
+</div>
 
 @if (!string.IsNullOrEmpty(@Context.Request.Query["error"]))
 {

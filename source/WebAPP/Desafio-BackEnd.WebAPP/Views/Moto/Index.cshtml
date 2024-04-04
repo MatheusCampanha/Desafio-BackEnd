@@ -5,12 +5,15 @@
     ViewBag.Title = "Lista de Motos";
 }
 
-<h1>Lista de Motos</h1>
+<div style="display: flex; flex-direction: row; justify-content: space-between;">
+    <h1>Lista de Motos</h1>
+    @Html.ActionLink("Nova", "Create", "Moto", null, new { @class = "btn", @style = "width: fit-content;" })
+</div>
 
-<input type="text" id="inputPlaca" placeholder="Digite a placa...">
-<button class="btn btn-primary" id="btnBuscar">Buscar</button>
-
-@Html.ActionLink("Nova", "Create", "Moto", null, new { @class = "btn btn-primary" })
+<div style="display: flex; flex-direction: row;">
+    <input type="text" id="inputPlaca" placeholder="Digite a placa..." style="width: 50%; margin-right: 25px;">
+    <button class="btn" style="width: fit-content;" id="btnBuscar">Buscar</button>
+</div>
 
 <div id="tableContainer">
     @Html.Partial("_MotosTablePartial", Model)
