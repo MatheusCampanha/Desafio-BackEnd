@@ -44,6 +44,16 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
         {
             var pedidos = await _pedidos.Find(_ => true).ToListAsync();
 
+            var entregadorRepository = new EntregadorRepository(_settings);
+            var entregadores = await entregadorRepository.GetAll();
+            var entregadoresDictionary = entregadores.ToDictionary(entregador => entregador.Id, entregador => entregador.Nome);
+
+            foreach (var pedido in pedidos)
+            {
+                if (entregadoresDictionary.TryGetValue(pedido.EntregadorId, out var nomeEntregador))
+                    pedido.EntregadorNome = nomeEntregador;
+            }
+
             return pedidos;
         }
 

@@ -29,38 +29,3 @@
 </div>
 
 <button type="button" id="btnSalvar" class="btn btn-primary">Salvar</button>
-
-@section scripts {
-    <script>
-        $(document).ready(function () {
-            // $('#btnSalvar').click(function () {
-            //     var fileInput = $('#ImagemUrl')[0].files[0];
-            //     var formData = new FormData();
-
-            //     formData.append('Nome', $('#Nome').val());
-            //     formData.append('Cnpj', $('#Cnpj').val());
-            //     formData.append('DataNascimento', $('#DataNascimento').val());
-            //     formData.append('NumeroCNH', $('#NumeroCnh').val());
-            //     formData.append('TipoCNH', $('#TipoCnh').val());
-            //     formData.append('ImagemCNH', fileInput);
-
-            //     $.ajax({
-            //         url: '@Url.Action("Create", "Entregador")',
-            //         type: 'POST',
-            //         data: formData,
-            //         processData: false,
-            //         contentType: false,
-            //         success: function (result) {
-            //             // Lidar com a resposta bem-sucedida
-            //             console.log("Entregador cadastrado com sucesso!");
-            //             window.location.href = '@Url.Action("Index", "Home")'; // Redirecionar para a página inicial
-            //         },
-            //         error: function (xhr, status, error) {
-            //             // Lidar com erros na solicitação
-            //             console.error('Erro ao cadastrar o entregador:', error);
-            //         }
-            //     });
-            // });
-        });
-    </script>
-}

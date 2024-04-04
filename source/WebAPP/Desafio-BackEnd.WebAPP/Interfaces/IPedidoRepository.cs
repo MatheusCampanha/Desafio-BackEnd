@@ -6,6 +6,7 @@ namespace Desafio_BackEnd.WebAPP.Interfaces
     public interface IPedidoRepository
     {
         Task Create(string token, CreatePedidoViewModel model);
-        Task<List<PedidoViewModel>> GetAll(string token);
+        Task AtualizarSituacao(string token, UpdateSituacaoPedidoViewModel model);
+        Task<List<Pedido>> Get(string token, string? entregadorId);
     }
 }

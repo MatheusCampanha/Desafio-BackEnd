@@ -31,11 +31,11 @@
 
         function deleteEntregador(id) {
             $.ajax({
-                url: '@Url.Action("Delete", "Moto")',
+                url: '@Url.Action("Delete", "Entregador")',
                 type: 'DELETE',
                 data: { id: id },
                 success: function (result) {
-                    window.location.href = '@Url.Action("Index", "Moto")';
+                    window.location.href = '@Url.Action("Index", "Entregador")';
                 },
                 error: function (xhr, status, error) {
                     alert('Erro ao excluir: ' + error);

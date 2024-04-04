@@ -12,7 +12,10 @@
             <tr>
                 <th style="display:none;">Id</th>
                 <th>Pedido</th>
-                <th>Entregador</th>
+                @if (Model.IsUserAdmin)
+                {
+                    <th>Entregador</th>
+                }
                 <th>Data</th>
                 <th>Valor</th>
                 @if (!Model.IsUserAdmin)
@@ -27,13 +30,16 @@
                 <tr>
                     <td style="display:none;">@notificacao.Id</td>
                     <td>@notificacao.PedidoId</td>
-                    <td>@notificacao.EntregadorNome</td>
+                    @if (Model.IsUserAdmin)
+                    {
+                        <td>@notificacao.EntregadorNome</td>
+                    }
                     <td>@notificacao.Data.ToString("dd/MM/yyyy")</td>
                     <td>R$ @notificacao.Valor</td>
                     @if (!Model.IsUserAdmin)
                     {
                         <td>
-                            @Html.ActionLink("CNH", "Edit", new { entregadorId = notificacao.Id }, new { @class = "btn btn-primary" })
+                            <button class="btn btn-primary" onclick="accept('@notificacao.PedidoId', '@notificacao.EntregadorId')">Aceitar</button>
                         </td>
                     }
                 </tr>
@@ -44,4 +50,31 @@
 else
 {
     <h3>Nenhuma notificacao encontrada...</h3>
+}
+
+@section scripts {
+    <script>
+        function accept(pedidoId, entregadoId) {
+            var formData = new FormData();
+
+            formData.append('PedidoId', pedidoId);
+            formData.append('Situacao', 'Aceito');
+            formData.append('EntregadorId', entregadoId);
+
+            $.ajax({
+                url: '@Url.Action("UpdateSitacao", "Pedido")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    alert(result.message);
+                    window.location.href = '@Url.Action("Index", "Home")';
+                },
+                error: function (xhr, status, error) {
+                    console.error('Erro ao cadastrar o entregador:', error);
+                }
+            });
+        }
+    </script>
 }

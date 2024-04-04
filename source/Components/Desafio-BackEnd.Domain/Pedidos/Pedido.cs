@@ -24,11 +24,11 @@ namespace Desafio_BackEnd.Domain.Pedidos
             SetEntregadorId(entregadorId);
         }
 
-        public string Id { get; set; } = default!;
-        public DateTime DataCriacao { get; set; }
-        public decimal Valor { get; set; }
-        public string Situacao { get; set; } = default!;
-        public string? EntregadorId { get; set; }
+        public string Id { get; private set; } = default!;
+        public DateTime DataCriacao { get; private set; }
+        public decimal Valor { get; private set; }
+        public string Situacao { get; private set; } = default!;
+        public string? EntregadorId { get; private set; }
 
         public void SetId(string id)
         {
@@ -59,9 +59,6 @@ namespace Desafio_BackEnd.Domain.Pedidos
 
         public void SetEntregadorId(string? entregadorId)
         {
-            if (!Situacao.Equals("Disponível") && string.IsNullOrEmpty(entregadorId))
-                AddNotification("Pedido.entregadorId", "Deve ser fornecido");
-
             if (Valid)
                 EntregadorId = entregadorId;
         }

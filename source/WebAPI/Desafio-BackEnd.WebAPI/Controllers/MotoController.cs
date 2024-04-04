@@ -12,7 +12,6 @@ namespace Desafio_BackEnd.WebAPI.Controllers
 {
     [Route("")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
     public class MotoController(IMotoHandler motoHandler, IMotoRepository motoRepository) : BaseController
     {
         private readonly IMotoHandler _motoHandler = motoHandler;
@@ -46,6 +45,7 @@ namespace Desafio_BackEnd.WebAPI.Controllers
 
         [HttpPost]
         [Route("motos")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(MotoDTO))]
         public async Task<IActionResult> Post([FromBody] InsertMotoCommand command)
         {
@@ -55,6 +55,7 @@ namespace Desafio_BackEnd.WebAPI.Controllers
 
         [HttpPatch]
         [Route("motos/{id}/placa")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Patch(string id, [FromBody] UpdatePlacaCommand command)
         {
             command.AlterId(id);
@@ -64,6 +65,7 @@ namespace Desafio_BackEnd.WebAPI.Controllers
 
         [HttpDelete]
         [Route("motos/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(string id)
         {
             var result = await _motoHandler.Handle(id);

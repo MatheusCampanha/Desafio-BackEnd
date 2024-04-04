@@ -8,9 +8,10 @@ using System.Security.Claims;
 
 namespace Desafio_BackEnd.WebAPP.Controllers
 {
-    public class NotificacaoController(INotificacaoRepository notificacaoRepository) : Controller
+    public class NotificacaoController(INotificacaoRepository notificacaoRepository, IEntregadorRepository entregadorRepository) : Controller
     {
         private readonly INotificacaoRepository _notificacaoRepository = notificacaoRepository;
+        private readonly IEntregadorRepository _entregadorRepository = entregadorRepository;
 
         [JwtAuthorizationFilter]
         public async Task<IActionResult> Index(string token)
@@ -26,10 +27,19 @@ namespace Desafio_BackEnd.WebAPP.Controllers
             string? entregadorId = null;
 
             if (!isUserAdmin)
-                entregadorId = GetUserId(token);
+            {
+                var userId = GetUserId(token);
+                var entregador = await _entregadorRepository.GetByUserId(userId, token);
+                if (entregador == null)
+                    return RedirectToAction("Create", "Entregador", token);
+
+                entregadorId = entregador.Id;
+            }
+
+            var notificacoes = await _notificacaoRepository.Get(token, entregadorId);
 
             model.IsUserAdmin = isUserAdmin;
-            model.Notificacoes = await _notificacaoRepository.Get(token, entregadorId);
+            model.Notificacoes = notificacoes;
 
             return View(model);
         }
