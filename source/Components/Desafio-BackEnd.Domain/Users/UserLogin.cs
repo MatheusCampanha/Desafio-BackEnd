@@ -1,8 +1,8 @@
 ﻿namespace Desafio_BackEnd.Domain.Users
 {
-    public class UserLogin
+    public class UserLogin(string username, string password)
     {
-        public string Username { get; set; } = default!;
-        public string Password { get; set; } = default!;
+        public string Username { get; private set; } = username;
+        public string Password { get; private set; } = password;
     }
 }

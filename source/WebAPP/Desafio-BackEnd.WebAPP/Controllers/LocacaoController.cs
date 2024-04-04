@@ -34,7 +34,7 @@ namespace Desafio_BackEnd.WebAPP.Controllers
             try
             {
                 await _locacaoRepository.Create(model, token);
-                return Json(new {status = "Ok", message = "Locação confirmada!"});
+                return Json(new { status = "Ok", message = "Locação confirmada!" });
             }
             catch
             {

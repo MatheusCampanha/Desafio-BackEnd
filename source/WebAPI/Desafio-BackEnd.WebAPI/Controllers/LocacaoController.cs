@@ -2,7 +2,6 @@
 using Desafio_BackEnd.Domain.Locacoes.DTO;
 using Desafio_BackEnd.Domain.Locacoes.Interfaces.Handlers;
 using Desafio_BackEnd.Domain.Locacoes.Interfaces.Repositories;
-using Desafio_BackEnd.Domain.Motos.DTO;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 

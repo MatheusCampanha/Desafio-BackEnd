@@ -1,6 +1,4 @@
 ﻿using Desafio_BackEnd.Domain.Core.Commands;
-using Desafio_BackEnd.Domain.Core.Enums;
-using Microsoft.AspNetCore.Http;
 using System.Text.Json.Serialization;
 
 namespace Desafio_BackEnd.Domain.Entregadores.Commands

@@ -1,12 +1,10 @@
-﻿using Desafio_BackEnd.Domain.Core.Queries;
-using Desafio_BackEnd.Domain.Motos.Commands;
+﻿using Desafio_BackEnd.Domain.Motos.Commands;
 using Desafio_BackEnd.Domain.Motos.DTO;
 using Desafio_BackEnd.Domain.Motos.Interfaces.Handlers;
 using Desafio_BackEnd.Domain.Motos.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using System.Numerics;
 
 namespace Desafio_BackEnd.WebAPI.Controllers
 {

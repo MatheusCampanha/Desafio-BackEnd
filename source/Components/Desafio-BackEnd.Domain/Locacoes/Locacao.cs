@@ -4,19 +4,6 @@ namespace Desafio_BackEnd.Domain.Locacoes
 {
     public class Locacao : Entity
     {
-        public Locacao(string? id, string entregadorId, string motoId, DateTime dataInicial, DateTime dataFinal, DateTime dataPrevisaoEntrega, decimal valorTotal, int plano, bool finalizada)
-        {
-            SetId(id);
-            SetEntregadorId(entregadorId);
-            SetMotoId(motoId);
-            SetDataInicial(dataInicial);
-            SetDataFinal(dataFinal);
-            SetDataPrevisaoEntrega(dataPrevisaoEntrega);
-            SetValorTotal(valorTotal);
-            SetPlano(plano);
-            SetFinalizada(finalizada);
-        }
-
         public Locacao(string entregadorId, string motoId, DateTime dataInicial, DateTime dataFinal, DateTime dataPrevisaoEntrega, decimal valorTotal, int plano, bool finalizada)
         {
             SetEntregadorId(entregadorId);
@@ -30,20 +17,14 @@ namespace Desafio_BackEnd.Domain.Locacoes
         }
 
         public string? Id { get; private set; }
-        public string EntregadorId { get; set; } = default!;
-        public string MotoId { get; set; } = default!;
-        public DateTime DataInicial { get; set; }
-        public DateTime DataFinal { get; set; }
-        public DateTime DataPrevisaoEntrega { get; set; }
-        public decimal ValorTotal { get; set; }
-        public int Plano { get; set; }
-        public bool Finalizada { get; set; }
-
-        public void SetId(string? id)
-        {
-            if (Valid)
-                Id = id;
-        }
+        public string EntregadorId { get; private set; } = default!;
+        public string MotoId { get; private set; } = default!;
+        public DateTime DataInicial { get; private set; }
+        public DateTime DataFinal { get; private set; }
+        public DateTime DataPrevisaoEntrega { get; private set; }
+        public decimal ValorTotal { get; private set; }
+        public int Plano { get; private set; }
+        public bool Finalizada { get; private set; }
 
         public void SetEntregadorId(string entregadorId)
         {

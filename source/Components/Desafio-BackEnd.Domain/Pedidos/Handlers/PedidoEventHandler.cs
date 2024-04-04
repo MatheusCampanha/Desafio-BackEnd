@@ -3,11 +3,11 @@ using Desafio_BackEnd.Domain.Notificacoes;
 using Desafio_BackEnd.Domain.Notificacoes.DTO;
 using Desafio_BackEnd.Domain.Notificacoes.Interfaces.Repositories;
 using Desafio_BackEnd.Domain.Pedidos.Event;
+using Desafio_BackEnd.Domain.Pedidos.Interfaces.Handlers;
+using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
-using Newtonsoft.Json;
-using Desafio_BackEnd.Domain.Pedidos.Interfaces.Handlers;
 
 namespace Desafio_BackEnd.Domain.Pedidos.Handlers
 {
@@ -52,7 +52,7 @@ namespace Desafio_BackEnd.Domain.Pedidos.Handlers
             var notificacao = new Notificacao(@event.PedidoId, @event.EntregadorId, @event.Data, @event.Valor, false);
 
             var notificacaoDTO = new NotificacaoDTO(notificacao);
-            await _notificacaoRepository.Create(notificacaoDTO);
+            await _notificacaoRepository.Insert(notificacaoDTO);
         }
     }
 }

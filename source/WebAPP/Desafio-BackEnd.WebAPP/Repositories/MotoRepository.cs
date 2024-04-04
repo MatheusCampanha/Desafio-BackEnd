@@ -1,9 +1,7 @@
 ﻿using Desafio_BackEnd.WebAPP.Interfaces;
 using Desafio_BackEnd.WebAPP.Models.Moto;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
-using System.Numerics;
 
 namespace Desafio_BackEnd.WebAPP.Repositories
 {
@@ -28,7 +26,7 @@ namespace Desafio_BackEnd.WebAPP.Repositories
                 var json = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<List<MotoViewModel>>(json)!;
             }
-            else if(response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
                 return [];
             }
@@ -112,7 +110,7 @@ namespace Desafio_BackEnd.WebAPP.Repositories
         public async Task SaveNew(CreateMotoViewModel model, string token)
         {
             using var httpClient = new HttpClient();
-            
+
             var command = new
             {
                 model.Ano,

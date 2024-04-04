@@ -1,6 +1,4 @@
 ﻿using Desafio_BackEnd.Domain.Core.Entities;
-using Desafio_BackEnd.Domain.Core.Enums;
-using System.Diagnostics;
 
 namespace Desafio_BackEnd.Domain.Pedidos
 {

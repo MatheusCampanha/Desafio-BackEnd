@@ -1,5 +1,4 @@
-﻿using Desafio_BackEnd.Domain.Core.Enums;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Desafio_BackEnd.Domain.Pedidos.DTO

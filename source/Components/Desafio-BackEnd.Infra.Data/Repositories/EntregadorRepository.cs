@@ -4,9 +4,6 @@ using Desafio_BackEnd.Domain.Core.Results;
 using Desafio_BackEnd.Domain.Entregadores;
 using Desafio_BackEnd.Domain.Entregadores.DTO;
 using Desafio_BackEnd.Domain.Entregadores.Interfaces.Repositories;
-using Desafio_BackEnd.Domain.Locacoes.DTO;
-using Desafio_BackEnd.Domain.Pedidos.DTO;
-using Microsoft.AspNetCore.Http;
 using MongoDB.Driver;
 using System.Net;
 

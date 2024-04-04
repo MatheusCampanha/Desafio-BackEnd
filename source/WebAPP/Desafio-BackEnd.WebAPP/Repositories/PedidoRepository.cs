@@ -1,10 +1,7 @@
-﻿using Desafio_BackEnd.Domain.Entregadores;
-using Desafio_BackEnd.WebAPP.Interfaces;
-using Desafio_BackEnd.WebAPP.Models.Moto;
+﻿using Desafio_BackEnd.WebAPP.Interfaces;
 using Desafio_BackEnd.WebAPP.Models.Pedido;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
-using System.Numerics;
 
 namespace Desafio_BackEnd.WebAPP.Repositories
 {

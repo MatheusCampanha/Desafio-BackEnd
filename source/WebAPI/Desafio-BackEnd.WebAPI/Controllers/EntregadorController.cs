@@ -1,5 +1,4 @@
-﻿using Desafio_BackEnd.Domain.Core.Queries;
-using Desafio_BackEnd.Domain.Entregadores.Commands;
+﻿using Desafio_BackEnd.Domain.Entregadores.Commands;
 using Desafio_BackEnd.Domain.Entregadores.DTO;
 using Desafio_BackEnd.Domain.Entregadores.Interfaces.Handlers;
 using Desafio_BackEnd.Domain.Entregadores.Interfaces.Repositories;
@@ -73,7 +72,6 @@ namespace Desafio_BackEnd.WebAPI.Controllers
             var result = await _entregadorHandler.Handle(id, imagem);
             return Result(result);
         }
-
 
         [HttpDelete]
         [Route("entregadores/{id}")]

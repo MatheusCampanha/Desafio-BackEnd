@@ -17,7 +17,7 @@ namespace Desafio_BackEnd.Domain.Locacoes.DTO
         [BsonRepresentation(BsonType.Decimal128)]
         public decimal ValorTotal { get; init; }
         public int Plano { get; init; }
-        public bool  Finalizada { get; init; }
+        public bool Finalizada { get; init; }
 
         public LocacaoDTO(Locacao locacao) : this(locacao.Id, locacao.EntregadorId, locacao.MotoId, locacao.DataInicial, locacao.DataFinal, locacao.DataPrevisaoEntrega, locacao.ValorTotal, locacao.Plano, locacao.Finalizada)
         {

@@ -1,6 +1,5 @@
 ﻿using Desafio_BackEnd.Domain.Core.Data;
 using Desafio_BackEnd.Domain.Core.Results;
-using Desafio_BackEnd.Domain.Entregadores.DTO;
 using Desafio_BackEnd.Domain.Notificacoes.DTO;
 using Desafio_BackEnd.Domain.Notificacoes.Interfaces.Repositories;
 using MongoDB.Driver;
@@ -56,7 +55,7 @@ namespace Desafio_BackEnd.Infra.Data.Repositories
             return result;
         }
 
-        public async Task<Result<NotificacaoDTO>> Create(NotificacaoDTO notificao)
+        public async Task<Result<NotificacaoDTO>> Insert(NotificacaoDTO notificao)
         {
             await _notificacoes.InsertOneAsync(notificao);
 

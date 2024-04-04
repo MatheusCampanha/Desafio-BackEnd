@@ -4,14 +4,14 @@ namespace Desafio_BackEnd.Domain.Locacoes.Commands
 {
     public class InsertLocacaoCommand(string entregadorId, string motoId, DateTime dataInicial, DateTime dataFinal, DateTime dataPrevisaoEntrega, decimal valorTotal, int plano, bool finalizada) : Command
     {
-        public string EntregadorId { get; set; } = entregadorId;
-        public string MotoId { get; set; } = motoId;
-        public DateTime DataInicial { get; set; } = dataInicial;
-        public DateTime DataFinal { get; set; } = dataFinal;
-        public DateTime DataPrevisaoEntrega { get; set; } = dataPrevisaoEntrega;
-        public decimal ValorTotal { get; set; } = valorTotal;
-        public int Plano { get; set; } = plano;
-        public bool Finalizada { get; set; } = finalizada;
+        public string EntregadorId { get; private set; } = entregadorId;
+        public string MotoId { get; private set; } = motoId;
+        public DateTime DataInicial { get; private set; } = dataInicial;
+        public DateTime DataFinal { get; private set; } = dataFinal;
+        public DateTime DataPrevisaoEntrega { get; private set; } = dataPrevisaoEntrega;
+        public decimal ValorTotal { get; private set; } = valorTotal;
+        public int Plano { get; private set; } = plano;
+        public bool Finalizada { get; private set; } = finalizada;
 
         public override bool IsValid()
         {

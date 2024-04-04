@@ -1,10 +1,8 @@
 ﻿using Desafio_BackEnd.Domain.Core.Commands;
-using Desafio_BackEnd.Domain.Core.Data;
 using Desafio_BackEnd.Domain.Core.Results;
 using Desafio_BackEnd.Domain.Entregadores.Interfaces.Repositories;
 using Desafio_BackEnd.Domain.Pedidos.Commands;
 using Desafio_BackEnd.Domain.Pedidos.DTO;
-using Desafio_BackEnd.Domain.Pedidos.Event;
 using Desafio_BackEnd.Domain.Pedidos.Interfaces.Handlers;
 using Desafio_BackEnd.Domain.Pedidos.Interfaces.Repositories;
 using System.Net;

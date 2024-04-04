@@ -18,12 +18,6 @@
             _notifications.Add(new Notificacao(property, message, origem));
         }
 
-        public void AddNotifications(ICollection<Notificacao> notifications)
-        {
-            if (notifications == null) return;
-            _notifications.AddRange(notifications);
-        }
-
         public void AddNotifications(Notifiable item)
         {
             if (item == null) return;

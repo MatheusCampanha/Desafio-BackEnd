@@ -4,16 +4,6 @@ namespace Desafio_BackEnd.Domain.Notificacoes
 {
     public class Notificacao : Entity
     {
-        public Notificacao(string id, string pedidoId, string entregadorId, DateTime data, decimal valor, bool lida)
-        {
-            SetId(id);
-            SetPedidoId(pedidoId);
-            SetEntregadorId(entregadorId);
-            SetData(data);
-            SetValor(valor);
-            SetLida(lida);
-        }
-
         public Notificacao(string pedidoId, string entregadorId, DateTime data, decimal valor, bool lida)
         {
             SetPedidoId(pedidoId);
@@ -29,12 +19,6 @@ namespace Desafio_BackEnd.Domain.Notificacoes
         public DateTime Data { get; private set; }
         public decimal Valor { get; private set; }
         public bool Lida { get; private set; }
-
-        public void SetId(string id)
-        {
-            if (Valid)
-                Id = id;
-        }
 
         public void SetPedidoId(string pedidoId)
         {

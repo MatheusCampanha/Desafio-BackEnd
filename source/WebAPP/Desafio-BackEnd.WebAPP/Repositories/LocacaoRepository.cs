@@ -1,9 +1,7 @@
 ﻿using Desafio_BackEnd.WebAPP.Interfaces;
 using Desafio_BackEnd.WebAPP.Models.Locacao;
-using Desafio_BackEnd.WebAPP.Models.Moto;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
-using System.Reflection;
 
 namespace Desafio_BackEnd.WebAPP.Repositories
 {

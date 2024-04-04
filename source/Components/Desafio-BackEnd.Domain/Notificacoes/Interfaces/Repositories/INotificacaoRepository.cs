@@ -5,7 +5,7 @@ namespace Desafio_BackEnd.Domain.Notificacoes.Interfaces.Repositories
 {
     public interface INotificacaoRepository
     {
-        Task<Result<NotificacaoDTO>> Create(NotificacaoDTO notificao);
+        Task<Result<NotificacaoDTO>> Insert(NotificacaoDTO notificao);
 
         Task<List<NotificacaoDTO>> Get(string? entregadorId);
     }

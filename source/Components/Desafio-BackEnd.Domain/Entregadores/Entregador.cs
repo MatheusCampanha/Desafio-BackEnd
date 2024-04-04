@@ -1,6 +1,4 @@
 ﻿using Desafio_BackEnd.Domain.Core.Entities;
-using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson;
 
 namespace Desafio_BackEnd.Domain.Entregadores
 {

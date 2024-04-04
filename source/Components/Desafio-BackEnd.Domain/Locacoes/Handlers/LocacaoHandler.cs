@@ -26,7 +26,7 @@ namespace Desafio_BackEnd.Domain.Locacoes.Handlers
             }
 
             var entregadorResult = await _entregadorRepository.GetByIdResult(command.EntregadorId);
-            if (entregadorResult == null) 
+            if (entregadorResult == null)
             {
                 errorResult.AddNotification(nameof(command.EntregadorId), "Não encontrado");
                 return errorResult;

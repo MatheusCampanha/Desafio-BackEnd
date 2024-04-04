@@ -1,10 +1,4 @@
 ﻿using Desafio_BackEnd.Domain.Core.Commands;
-using Desafio_BackEnd.Domain.Core.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Desafio_BackEnd.Domain.Pedidos.Commands
 {

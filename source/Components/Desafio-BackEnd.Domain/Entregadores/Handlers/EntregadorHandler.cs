@@ -71,7 +71,7 @@ namespace Desafio_BackEnd.Domain.Entregadores.Handlers
                     return errorResult;
                 }
                 var entregador = entregadorResult.QueryResult.Registros.First();
-                
+
                 var caminhoImagemCNH = await _s3Repository.UploadFile(entregador.Id, imagemCNH);
                 entregador.SetCaminhoImagemCNH(caminhoImagemCNH);
 

@@ -1,3 +1,5 @@
+using Amazon.Runtime;
+using Amazon.S3;
 using Desafio_BackEnd.Domain.Core.Data;
 using Desafio_BackEnd.Infra.CrossCutting;
 using Desafio_BackEnd.WebAPI.Configurations;
@@ -8,10 +10,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.IO.Compression;
 using System.Text;
 using System.Text.Json.Serialization;
-using Amazon.S3;
-using Amazon;
-using Microsoft.Extensions.DependencyInjection;
-using Amazon.Runtime;
 
 var builder = WebApplication.CreateBuilder(args);
 

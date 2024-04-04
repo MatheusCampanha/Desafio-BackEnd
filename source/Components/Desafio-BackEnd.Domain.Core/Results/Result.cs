@@ -26,19 +26,6 @@ namespace Desafio_BackEnd.Domain.Core.Results
             }
         }
 
-        public Result(int statusCode, int paginaAtual, int registrosPorPagina, long totalRegistros, ICollection<T> registros)
-        {
-            StatusCode = statusCode;
-
-            QueryResult = new QueryResult<T>(paginaAtual, registrosPorPagina, totalRegistros, registros);
-
-            if (registros.Count == 0)
-            {
-                StatusCode = 422;
-                AddNotification(_dominio, $"Dados de {_dominio} não encontrados");
-            }
-        }
-
         [JsonIgnore]
         public readonly string _dominio = typeof(T).Name.ToString().Replace("QueryResult", "");
 

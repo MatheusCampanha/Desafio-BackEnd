@@ -1,5 +1,4 @@
-﻿using Desafio_BackEnd.Domain.Core.Data;
-using Desafio_BackEnd.WebAPP.Configurations.Filters;
+﻿using Desafio_BackEnd.WebAPP.Configurations.Filters;
 using Desafio_BackEnd.WebAPP.Interfaces;
 using Desafio_BackEnd.WebAPP.Models.Notificacao;
 using Microsoft.AspNetCore.Mvc;

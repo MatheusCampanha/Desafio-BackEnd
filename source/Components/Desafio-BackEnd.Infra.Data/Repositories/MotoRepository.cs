@@ -1,27 +1,23 @@
 ﻿using Desafio_BackEnd.Domain.Core.Commands;
 using Desafio_BackEnd.Domain.Core.Data;
 using Desafio_BackEnd.Domain.Core.Results;
-using Desafio_BackEnd.Domain.Locacoes.DTO;
 using Desafio_BackEnd.Domain.Motos;
 using Desafio_BackEnd.Domain.Motos.DTO;
 using Desafio_BackEnd.Domain.Motos.Interfaces.Repositories;
 using MongoDB.Driver;
 using System.Net;
-using System.Numerics;
 
 namespace Desafio_BackEnd.Infra.Data.Repositories
 {
     public class MotoRepository : IMotoRepository
     {
         private readonly IMongoCollection<MotoDTO> _motos;
-        private readonly IMongoCollection<LocacaoDTO> _locacoes;
 
         public MotoRepository(Settings settings)
         {
             var client = new MongoClient(settings.ConnectionStrings.DBApplication);
             var database = client.GetDatabase(settings.ConnectionStrings.DatabaseName);
             _motos = database.GetCollection<MotoDTO>("Moto");
-            _locacoes = database.GetCollection<LocacaoDTO>("Moto");
         }
 
         public async Task<Result<Moto>> GetById(string id)
