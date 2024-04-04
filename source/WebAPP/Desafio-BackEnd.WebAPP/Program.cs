@@ -7,6 +7,7 @@ builder.Services.AddScoped<IEntregadorRepository, EntregadorRepository>();
 builder.Services.AddScoped<ILocacaoRepository, LocacaoRepository>();
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<IMotoRepository, MotoRepository>();
+builder.Services.AddScoped<INotificacaoRepository, NotificacaoRepository>();
 builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
 
 // Add services to the container.

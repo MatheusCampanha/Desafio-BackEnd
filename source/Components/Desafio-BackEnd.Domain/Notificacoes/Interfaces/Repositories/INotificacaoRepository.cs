@@ -7,6 +7,6 @@ namespace Desafio_BackEnd.Domain.Notificacoes.Interfaces.Repositories
     {
         Task<Result<NotificacaoDTO>> Create(NotificacaoDTO notificao);
 
-        Task<List<NotificacaoDTO>> GetAll();
+        Task<List<NotificacaoDTO>> Get(string? entregadorId);
     }
 }

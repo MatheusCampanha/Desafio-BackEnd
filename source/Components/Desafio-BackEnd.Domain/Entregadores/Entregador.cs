@@ -1,11 +1,26 @@
 ﻿using Desafio_BackEnd.Domain.Core.Entities;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson;
 
 namespace Desafio_BackEnd.Domain.Entregadores
 {
     public class Entregador : Entity
     {
-        public Entregador(string nome, string cnpj, DateTime dataNascimento, string numeroCNH, string tipoCNH, string? caminhoImagemCNH = null)
+        public Entregador(string userId, string nome, string cnpj, DateTime dataNascimento, string numeroCNH, string tipoCNH, string? caminhoImagemCNH = null)
         {
+            SetUserId(userId);
+            SetNome(nome);
+            SetCNPJ(cnpj);
+            SetDataNascimento(dataNascimento);
+            SetNumeroCNH(numeroCNH);
+            SetTipoCNH(tipoCNH);
+            SetCaminhoImagemCNH(caminhoImagemCNH);
+        }
+
+        public Entregador(string id, string userId, string nome, string cnpj, DateTime dataNascimento, string numeroCNH, string tipoCNH, string? caminhoImagemCNH = null)
+        {
+            SetId(id);
+            SetUserId(userId);
             SetNome(nome);
             SetCNPJ(cnpj);
             SetDataNascimento(dataNascimento);
@@ -15,6 +30,7 @@ namespace Desafio_BackEnd.Domain.Entregadores
         }
 
         public string Id { get; private set; } = default!;
+        public string UserId { get; private set; } = default!;
         public string Nome { get; private set; } = default!;
         public string CNPJ { get; private set; } = default!;
         public DateTime DataNascimento { get; private set; }
@@ -26,6 +42,12 @@ namespace Desafio_BackEnd.Domain.Entregadores
         {
             if (Valid)
                 Id = id;
+        }
+
+        public void SetUserId(string userId)
+        {
+            if (Valid)
+                UserId = userId;
         }
 
         public void SetNome(string nome)

@@ -4,14 +4,16 @@ using Desafio_BackEnd.Domain.Entregadores.Commands;
 using Desafio_BackEnd.Domain.Entregadores.DTO;
 using Desafio_BackEnd.Domain.Entregadores.Interfaces.Handlers;
 using Desafio_BackEnd.Domain.Entregadores.Interfaces.Repositories;
+using Desafio_BackEnd.Domain.S3.Interfaces;
 using Microsoft.AspNetCore.Http;
 using System.Net;
 
 namespace Desafio_BackEnd.Domain.Entregadores.Handlers
 {
-    public class EntregadorHandler(IEntregadorRepository entregadorRepository) : IEntregadorHandler
+    public class EntregadorHandler(IEntregadorRepository entregadorRepository, IS3Helper s3Repository) : IEntregadorHandler
     {
         private readonly IEntregadorRepository _entregadorRepository = entregadorRepository;
+        private readonly IS3Helper _s3Repository = s3Repository;
 
         public async Task<Result<EntregadorDTO>> Handle(InsertEntregadorCommand command)
         {
@@ -39,7 +41,7 @@ namespace Desafio_BackEnd.Domain.Entregadores.Handlers
                     return errorResult;
                 }
 
-                var entregador = new Entregador(command.Nome, command.CNPJ, command.DataNascimento, command.NumeroCNH, command.TipoCNH);
+                var entregador = new Entregador(command.UserId, command.Nome, command.CNPJ, command.DataNascimento, command.NumeroCNH, command.TipoCNH);
 
                 if (entregador.Invalid)
                 {
@@ -69,14 +71,8 @@ namespace Desafio_BackEnd.Domain.Entregadores.Handlers
                     return errorResult;
                 }
                 var entregador = entregadorResult.QueryResult.Registros.First();
-
-                if (!string.IsNullOrEmpty(entregador.CaminhoImagemCNH))
-                {
-                    _entregadorRepository.ReplaceImage(entregador.CaminhoImagemCNH, imagemCNH);
-                    return new CommandResult(HttpStatusCode.NoContent.GetHashCode());
-                }
-
-                var caminhoImagemCNH = _entregadorRepository.SaveImagemCNH(entregador.NumeroCNH, imagemCNH);
+                
+                var caminhoImagemCNH = await _s3Repository.UploadFile(entregador.Id, imagemCNH);
                 entregador.SetCaminhoImagemCNH(caminhoImagemCNH);
 
                 if (entregador.Invalid)
@@ -105,9 +101,6 @@ namespace Desafio_BackEnd.Domain.Entregadores.Handlers
                 return errorResult;
             }
             var entregador = entregadorResult.QueryResult.Registros.First();
-
-            if (!string.IsNullOrEmpty(entregador.CaminhoImagemCNH))
-                _entregadorRepository.DeleteImage(entregador.CaminhoImagemCNH);
 
             return await _entregadorRepository.Delete(id);
         }

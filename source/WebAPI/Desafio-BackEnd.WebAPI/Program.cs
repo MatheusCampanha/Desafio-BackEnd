@@ -8,6 +8,10 @@ using Microsoft.IdentityModel.Tokens;
 using System.IO.Compression;
 using System.Text;
 using System.Text.Json.Serialization;
+using Amazon.S3;
+using Amazon;
+using Microsoft.Extensions.DependencyInjection;
+using Amazon.Runtime;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +39,11 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerSetup(settings!.ApplicationName);
+
+var awsOptions = builder.Configuration.GetAWSOptions();
+awsOptions.Credentials = new BasicAWSCredentials(settings.S3Settings.AccessId, settings.S3Settings.AccessKey);
+builder.Services.AddDefaultAWSOptions(awsOptions);
+builder.Services.AddAWSService<IAmazonS3>();
 
 builder.Services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Optimal);
 builder.Services.AddResponseCompression(options => { options.Providers.Add<GzipCompressionProvider>(); });

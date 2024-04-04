@@ -13,18 +13,11 @@ namespace Desafio_BackEnd.Domain.Entregadores.Interfaces.Repositories
         Task<List<string>> GetAvaiable();
 
         Task<EntregadorDTO> GetByIdResult(string id);
+        Task<EntregadorDTO> GetByUserIdResult(string userId);
 
         Task<Result<EntregadorDTO>> GetByCNPJResult(string cnpj);
 
         Task<Result<EntregadorDTO>> GetByNumeroCNHResult(string numeroCNH);
-
-        string SaveImagemCNH(string numeroCNH, IFormFile imagemFile);
-
-        byte[] GetImagemCNH(string caminhoImagemCNH);
-
-        void ReplaceImage(string filePath, IFormFile newImageFile);
-
-        bool DeleteImage(string filePath);
 
         Task<Result<EntregadorDTO>> Insert(EntregadorDTO entregador);
 

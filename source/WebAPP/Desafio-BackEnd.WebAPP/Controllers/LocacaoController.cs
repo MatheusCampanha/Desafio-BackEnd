@@ -16,8 +16,12 @@ namespace Desafio_BackEnd.WebAPP.Controllers
         public async Task<IActionResult> Index(string token)
         {
             var userId = GetUserId(token);
-            userId = "66062139c16619a6c5252c0f";
+            //userId = "66062139c16619a6c5252c0f";
             var entregador = await _entregadorRepository.GetById(userId, token);
+
+            if (entregador == null)
+                return RedirectToAction("Create", "Entregador");
+
             var locacaoAtiva = await _locacaoRepository.GetActive(entregador.Id, token);
             if (locacaoAtiva != null)
                 return View(locacaoAtiva);

@@ -26,7 +26,6 @@
                     <td>@entregador.NumeroCNH</td>
                     <td>@entregador.TipoCNH</td>
                     <td>
-                        @Html.ActionLink("CNH", "Edit", new { entregadorId = entregador.Id }, new { @class = "btn btn-primary" })
                         <button class="btn btn-danger" onclick="deleteEntregador('@entregador.Id')">Excluir</button>
                     </td>
                 </tr>

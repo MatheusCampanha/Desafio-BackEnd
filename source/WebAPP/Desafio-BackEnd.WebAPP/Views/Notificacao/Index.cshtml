@@ -1,0 +1,47 @@
+﻿@using Desafio_BackEnd.WebAPP.Models.Notificacao
+@model NotificacaoViewModel
+@{
+    ViewData["Title"] = "Notificacoes";
+}
+
+<h1>Notificacoes</h1>
+@if (Model != null && Model.Notificacoes.Count > 0)
+{
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th style="display:none;">Id</th>
+                <th>Pedido</th>
+                <th>Entregador</th>
+                <th>Data</th>
+                <th>Valor</th>
+                @if (!Model.IsUserAdmin)
+                {
+                    <th>Ações</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var notificacao in Model.Notificacoes)
+            {
+                <tr>
+                    <td style="display:none;">@notificacao.Id</td>
+                    <td>@notificacao.PedidoId</td>
+                    <td>@notificacao.EntregadorNome</td>
+                    <td>@notificacao.Data.ToString("dd/MM/yyyy")</td>
+                    <td>R$ @notificacao.Valor</td>
+                    @if (!Model.IsUserAdmin)
+                    {
+                        <td>
+                            @Html.ActionLink("CNH", "Edit", new { entregadorId = notificacao.Id }, new { @class = "btn btn-primary" })
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h3>Nenhuma notificacao encontrada...</h3>
+}

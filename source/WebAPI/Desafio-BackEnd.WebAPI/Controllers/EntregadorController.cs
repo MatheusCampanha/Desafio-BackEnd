@@ -41,6 +41,19 @@ namespace Desafio_BackEnd.WebAPI.Controllers
                 return NotFound();
         }
 
+        [HttpGet]
+        [Route("entregadores/user/{userId}")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(EntregadorDTO))]
+        public async Task<IActionResult> GetByUserId(string userId)
+        {
+            var result = await _entregadorRepository.GetByUserIdResult(userId);
+
+            if (result != null)
+                return Ok(result);
+            else
+                return NotFound();
+        }
+
         [HttpPost]
         [Route("entregadores")]
         [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(EntregadorDTO))]
@@ -52,9 +65,12 @@ namespace Desafio_BackEnd.WebAPI.Controllers
 
         [HttpPatch]
         [Route("entregadores/{id}/imagemCNH")]
-        public async Task<IActionResult> Patch(string id, [FromBody] IFormFile imagemCNH)
+        public async Task<IActionResult> Patch(string id)
         {
-            var result = await _entregadorHandler.Handle(id, imagemCNH);
+            var files = Request.Form.Files;
+            var imagem = files[0];
+
+            var result = await _entregadorHandler.Handle(id, imagem);
             return Result(result);
         }
 

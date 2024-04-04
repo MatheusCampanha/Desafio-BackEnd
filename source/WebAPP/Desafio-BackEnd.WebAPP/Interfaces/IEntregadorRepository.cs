@@ -6,6 +6,7 @@ namespace Desafio_BackEnd.WebAPP.Interfaces
     {
         Task<List<EntregadorViewModel>> GetAll(string token);
         Task<EntregadorViewModel> GetById(string id, string token);
-        Task Create(CreateEntregadorViewModel model, string token);
+        Task<EntregadorViewModel> GetByUserId(string userId, string token);
+        Task Save(SaveEntregadorViewModel model, IFormFile imagemCNH, string token);
     }
 }

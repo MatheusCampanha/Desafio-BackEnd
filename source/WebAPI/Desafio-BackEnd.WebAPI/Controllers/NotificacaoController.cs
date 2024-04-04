@@ -12,9 +12,9 @@ namespace Desafio_BackEnd.WebAPI.Controllers
         [HttpGet]
         [Route("notificacoes")]
         [ProducesResponseType((int)HttpStatusCode.PartialContent, Type = typeof(List<NotificacaoDTO>))]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> Get(string? entregadorId)
         {
-            var result = await _notificacaoRepository.GetAll();
+            var result = await _notificacaoRepository.Get(entregadorId);
 
             if (result.Count > 0)
                 return Ok(result);

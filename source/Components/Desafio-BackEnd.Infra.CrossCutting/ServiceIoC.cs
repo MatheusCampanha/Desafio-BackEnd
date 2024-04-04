@@ -12,10 +12,12 @@ using Desafio_BackEnd.Domain.Notificacoes.Interfaces.Repositories;
 using Desafio_BackEnd.Domain.Pedidos.Handlers;
 using Desafio_BackEnd.Domain.Pedidos.Interfaces.Handlers;
 using Desafio_BackEnd.Domain.Pedidos.Interfaces.Repositories;
+using Desafio_BackEnd.Domain.S3.Interfaces;
 using Desafio_BackEnd.Domain.Users.Handlers;
 using Desafio_BackEnd.Domain.Users.Interfaces.Handlers;
 using Desafio_BackEnd.Domain.Users.Interfaces.Repositories;
 using Desafio_BackEnd.Infra.Data.Helpers.Jwt;
+using Desafio_BackEnd.Infra.Data.Helpers.S3;
 using Desafio_BackEnd.Infra.Data.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -30,6 +32,7 @@ namespace Desafio_BackEnd.Infra.CrossCutting
             #region Helpers
 
             services.AddScoped<IJwtHelper, JwtHelper>();
+            services.AddScoped<IS3Helper, S3Helper>();
 
             #endregion Helpers
 

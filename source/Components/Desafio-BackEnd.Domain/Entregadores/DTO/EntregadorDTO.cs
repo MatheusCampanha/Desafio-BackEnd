@@ -5,9 +5,10 @@ namespace Desafio_BackEnd.Domain.Entregadores.DTO
 {
     public record EntregadorDTO
     {
-        public EntregadorDTO(string id, string nome, string cnpj, DateTime dataNascimento, string numeroCNH, string tipoCNH, string? caminhoImagemCNH)
+        public EntregadorDTO(string id, string userId, string nome, string cnpj, DateTime dataNascimento, string numeroCNH, string tipoCNH, string? caminhoImagemCNH)
         {
             Id = id;
+            UserId = userId;
             Nome = nome;
             CNPJ = cnpj;
             DataNascimento = dataNascimento;
@@ -16,12 +17,13 @@ namespace Desafio_BackEnd.Domain.Entregadores.DTO
             CaminhoImagemCNH = caminhoImagemCNH;
         }
 
-        public EntregadorDTO(Entregador entregador) : this(entregador.Id, entregador.Nome, entregador.CNPJ, entregador.DataNascimento, entregador.NumeroCNH, entregador.TipoCNH, entregador.CaminhoImagemCNH)
+        public EntregadorDTO(Entregador entregador) : this(entregador.Id, entregador.UserId, entregador.Nome, entregador.CNPJ, entregador.DataNascimento, entregador.NumeroCNH, entregador.TipoCNH, entregador.CaminhoImagemCNH)
         {
         }
 
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; init; }
+        public string UserId { get; init; }
         public string Nome { get; init; }
         public string CNPJ { get; init; }
         public DateTime DataNascimento { get; init; }

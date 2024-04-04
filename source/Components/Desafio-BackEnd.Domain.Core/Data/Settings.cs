@@ -38,6 +38,7 @@
     public class S3Settings
     {
         public string BucketName { get; set; } = default!;
-        public string Key { get; set; } = default!;
+        public string AccessId { get; set; } = default!;
+        public string AccessKey { get; set; } = default!;
     }
 }

@@ -23,12 +23,12 @@ namespace Desafio_BackEnd.Domain.Notificacoes
             SetLida(lida);
         }
 
-        public string Id { get; set; } = default!;
-        public string PedidoId { get; set; } = default!;
-        public string EntregadorId { get; set; } = default!;
-        public DateTime Data { get; set; }
-        public decimal Valor { get; set; }
-        public bool Lida { get; set; }
+        public string Id { get; private set; } = default!;
+        public string PedidoId { get; private set; } = default!;
+        public string EntregadorId { get; private set; } = default!;
+        public DateTime Data { get; private set; }
+        public decimal Valor { get; private set; }
+        public bool Lida { get; private set; }
 
         public void SetId(string id)
         {
