@@ -1,0 +1,88 @@
+﻿@using Desafio_BackEnd.WebAPP.Models.Pedido
+@model PedidoViewModel
+
+@{
+    ViewData["Title"] = "Pedidos";
+}
+
+<h1>Lista pedidos</h1>
+
+@Html.ActionLink("Novo", "Create", "Pedido", null, new { @class = "btn btn-primary" })
+
+@if (Model != null && Model.Pedidos.Count > 0)
+{
+    <table class="table">
+        <thead class="thead">
+            <tr>
+                <th>Data de Criação</th>
+                @if (Model.IsUserAdmin)
+                {
+                    <th>Entregador</th>
+                }
+                <th>Valor</th>
+                <th>Situação</th>
+                @if (!Model.IsUserAdmin)
+                {
+                    <th>Ações</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pedido in Model.Pedidos)
+            {
+                <tr>
+                    <td>@pedido.DataCriacao.ToString("dd/MM/yyyy")</td>
+                    @if (Model.IsUserAdmin)
+                    {
+                        <td>@pedido.EntregadorNome</td>
+                    }
+                    <td>@pedido.Valor</td>
+                    <td>@pedido.Situacao</td>
+                    @if (!Model.IsUserAdmin)
+                    {
+                        @if (pedido.Situacao.Equals("Aceito"))
+                        {
+                            <td>
+                                <button class="btn btn-primary" onclick="accept('@pedido.Id', '@pedido.EntregadorId')">Entregar</button>
+                            </td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h3>Nenhum pedido encontrado...</h3>
+}
+@section scripts {
+    <script>
+        function accept(pedidoId, entregadoId) {
+            var formData = new FormData();
+
+            formData.append('PedidoId', pedidoId);
+            formData.append('Situacao', 'Entregue');
+            formData.append('EntregadorId', entregadoId);
+
+            $.ajax({
+                url: '@Url.Action("UpdateSitacao", "Pedido")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    alert(result.message);
+                    window.location.href = '@Url.Action("Index", "Home")';
+                },
+                error: function (xhr, status, error) {
+                    console.error('Erro ao cadastrar o entregador:', error);
+                }
+            });
+        }
+    </script>
+}

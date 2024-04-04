@@ -1,0 +1,86 @@
+﻿@{
+    ViewData["Title"] = "Nova Moto";
+}
+<h1>Cadastrar Nova Moto</h1>
+
+<div style="padding: 10px">
+    <form id="formMoto" enctype="multipart/form-data">
+        <div>
+            <label for="ano">Ano:</label>
+            <input type="number" id="ano" name="ano">
+        </div>
+
+        <div>
+            <label for="ano">Ano:</label>
+            <input type="number" id="ano" name="ano">
+        </div>
+
+        <div>
+            <label for="modelo">Modelo:</label>
+            <input type="text" id="modelo" name="modelo">
+        </div>
+
+        <div>
+            <label for="placa">Placa:</label>
+            <input type="text" id="placa" name="placa">
+        </div>
+
+        <button class="btn" id="btnCadastrar">Cadastrar</button>
+    </form>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('#btnCadastrar').click(async function () {
+
+                if (!validate())
+                    return;
+
+                var model = {
+                    Ano: parseInt($('#ano').val()),
+                    Modelo: $('#modelo').val(),
+                    Placa: $('#placa').val()
+                }
+
+                var data = JSON.stringify(model);
+
+                $.ajax({
+                    url: '@Url.Action("SaveNew", "Moto")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: data,
+                    success: function (result) {
+                        window.location.href = '@Url.Action("Index", "Moto")';
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Erro ao salvar a edição: ' + error);
+                    }
+                });
+            });
+
+            function validate() {
+                var ano = $('#ano').val();
+                var modelo = $('#modelo').val();
+                var placa = $('#placa').val();
+
+                if (!ano || isNaN(ano) || ano.length !== 4 || parseInt(ano) < 1900 || parseInt(ano) > new Date().getFullYear()) {
+                    alert('Ano inválido. Por favor, insira um ano válido.');
+                    return false;
+                }
+
+                if (!modelo) {
+                    alert('Modelo não pode ser nulo ou vazio.');
+                    return false;
+                }
+
+                if (!placa) {
+                    alert('Placa não pode ser nula ou vazia.');
+                    return false;
+                }
+
+                return true;
+            }
+        });
+    </script>
+}

@@ -1,0 +1,46 @@
+﻿@using Desafio_BackEnd.WebAPP.Models.Entregador
+@model EntregadorViewModel
+
+@{
+    ViewData["Title"] = "Lista Entregadores";
+}
+
+<h1>Lista de Entregadores</h1>
+
+<div id="tableContainer">
+    @Html.Partial("_EntregadoresTablePartial", Model)
+</div>
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        buscarEntregadores();
+
+        function buscarEntregadores() {
+            $.ajax({
+                url: '@Url.Action("GetEntregadores", "Entregador")',
+                type: 'GET',
+                success: function (result) {
+                    $('#tableContainer').html(result);
+                },
+                error: function (xhr, status, error) {
+                    alert('Erro ao buscar entregadores: ' + error);
+                }
+            });
+        }
+
+        function deleteEntregador(id) {
+            $.ajax({
+                url: '@Url.Action("Delete", "Entregador")',
+                type: 'DELETE',
+                data: { id: id },
+                success: function (result) {
+                    window.location.href = '@Url.Action("Index", "Entregador")';
+                },
+                error: function (xhr, status, error) {
+                    alert('Erro ao excluir: ' + error);
+                }
+            });
+        };
+    </script>
+}

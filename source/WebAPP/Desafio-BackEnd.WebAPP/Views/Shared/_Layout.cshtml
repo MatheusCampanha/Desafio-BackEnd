@@ -1,0 +1,79 @@
+﻿@using System.IdentityModel.Tokens.Jwt;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Desafio_BackEnd.WebAPP</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @* <link rel="stylesheet" href="~/Desafio_BackEnd.WebAPP.styles.css" asp-append-version="true" /> *@
+</head>
+<body>
+    @{
+        var jwt = Context.Session.GetString("JWTToken");
+
+        var isLogged = !string.IsNullOrEmpty(jwt);
+        var isAdmin = false;
+
+        if (isLogged)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.ReadJwtToken(jwt);
+
+            var claims = token.Claims;
+
+            isAdmin = claims.Any(c => c.Value == "Admin");
+        }
+    }
+
+    @if (isLogged)
+    {
+        <div class="header">
+            <div class="header_buttons">
+                <div class="header_actions">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                </div>
+                @if (isAdmin)
+                {
+                    <div class="header_actions">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Moto" asp-action="Index">Motos</a>
+                    </div>
+                    <div class="header_actions">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Entregador" asp-action="Index">Entregadores</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="header_actions">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Entregador" asp-action="Create">Cadastro</a>
+                    </div>
+                    <div class="header_actions">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Locacao" asp-action="Index">Locações</a>
+                    </div>
+                }
+                <div class="header_actions">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Pedido" asp-action="Index">Pedidos</a>
+                </div>
+                <div class="header_actions">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Notificacao" asp-action="Index">Notificações</a>
+                </div>
+                <div class="header_actions">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Logout">Sair</a>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

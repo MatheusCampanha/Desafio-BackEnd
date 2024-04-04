@@ -1,0 +1,60 @@
+﻿@using Desafio_BackEnd.WebAPP.Models.Moto
+@model List<MotoViewModel>
+
+@{
+    ViewBag.Title = "Lista de Motos";
+}
+
+<div style="display: flex; flex-direction: row; justify-content: space-between;">
+    <h1>Lista de Motos</h1>
+    @Html.ActionLink("Nova", "Create", "Moto", null, new { @class = "btn", @style = "width: fit-content;" })
+</div>
+
+<div style="display: flex; flex-direction: row;">
+    <input type="text" id="inputPlaca" placeholder="Digite a placa..." style="width: 50%; margin-right: 25px;">
+    <button class="btn" style="width: fit-content;" id="btnBuscar">Buscar</button>
+</div>
+
+<div id="tableContainer">
+    @Html.Partial("_MotosTablePartial", Model)
+</div>
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        buscarMoto();
+        
+        $("#btnBuscar").click(function () {
+            var placa = $("#inputPlaca").val();
+            buscarMoto(placa);
+        });
+
+        function buscarMoto(placa) {
+            $.ajax({
+                url: '@Url.Action("GetMotos", "Moto")',
+                type: 'GET',
+                data: { placa: placa },
+                success: function (result) {
+                    $('#tableContainer').html(result);
+                },
+                error: function (xhr, status, error) {
+                    alert('Erro ao buscar moto: ' + error);
+                }
+            });
+        }
+
+        function deleteMoto(id) {
+            $.ajax({
+                url: '@Url.Action("Delete", "Moto")',
+                type: 'DELETE',
+                data: { id: id },
+                success: function (result) {
+                    window.location.href = '@Url.Action("Index", "Moto")';
+                },
+                error: function (xhr, status, error) {
+                    alert('Erro ao excluir: ' + error);
+                }
+            });
+        };
+    </script>
+}

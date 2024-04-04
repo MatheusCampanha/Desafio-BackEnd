@@ -1,0 +1,51 @@
+﻿@using Desafio_BackEnd.WebAPP.Models.Moto
+@model EditMotoViewModel
+
+@{
+    ViewData["Title"] = "Editar Placa";
+}
+<h1>Editar Placa</h1>
+
+<div style="padding: 10px">
+    <form id="formMoto" enctype="multipart/form-data">
+        <div>
+            <label for="inputOldPlaca">Alterar De:</label>
+            <input type="text" id="inputOldPlaca" value="@Model.Placa" disabled>
+        </div>
+
+        <div>
+            <label for="inputPlaca">Para:</label>
+            <input type="text" id="inputPlaca" placeholder="Digite a nova placa...">
+        </div>
+
+        <button class="btn" id="btnSalvar">Salvar</button>
+    </form>
+</div>
+    
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('#btnSalvar').click(async function () {
+                var model = {
+                    Id: '@Model.Id',
+                    Placa: $('#inputPlaca').val()
+                };
+
+                var data = JSON.stringify(model);
+
+                $.ajax({
+                    url: '@Url.Action("SaveEdit", "Moto")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: data,
+                    success: function (result) {
+                        window.location.href = '@Url.Action("Index", "Moto")';
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Erro ao salvar a edição: ' + error);
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -1,0 +1,31 @@
+﻿@using Desafio_BackEnd.WebAPP.Models.Locacao
+@model ConfirmLocacaoViewModel
+
+<table class="table">
+    <thead class="thead">
+        <tr>
+            <th style="display:none;">Id</th>
+            <th>Ano</th>
+            <th>Modelo</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var moto in Model.MotoViewModel)
+        {
+            <tr>
+                <td style="display:none;">@moto.Id</td>
+                <td>@moto.Ano</td>
+                <td>@moto.Modelo</td>
+                <td>
+                    @Html.ActionLink("Alugar", "Rent", new { id = moto.Id }, new { @class = "btn btn-primary" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    
+</script>

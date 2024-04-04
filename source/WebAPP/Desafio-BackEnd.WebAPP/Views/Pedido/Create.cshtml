@@ -1,0 +1,57 @@
+﻿@using Desafio_BackEnd.WebAPP.Models.Pedido
+@model CreatePedidoViewModel
+
+@{
+    ViewData["Title"] = "Cadastrar Pedido";
+}
+
+<h1>Novo Pedido</h1>
+
+<form id="formPedidos" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="DataCriacao">Data de Criação</label>
+        <input type="date" id="DataCriacao" name="DataCriacao" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="Valor">Valor</label>
+        <input type="text" id="Valor" name="Valor" class="form-control" />
+    </div>
+
+    <button type="button" id="btnVoltar" class="btn btn-primary">Voltar</button>
+    <button type="button" id="btnSalvar" class="btn btn-primary">Salvar</button>
+</form>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('#btnVoltar').click(function () {
+                window.location.href = '@Url.Action("Index", "Pedido")';
+            });
+
+            $('#btnSalvar').click(function () {
+                var dataCriacao = $('#DataCriacao').val();
+                var valor = parseFloat($("#Valor").val().replace(',', '.'));
+
+                var model = {
+                    DataCriacao: dataCriacao,
+                    Valor: valor
+                };
+
+                $.ajax({
+                    url: '@Url.Action("Create", "Pedido")',
+                    type: 'POST',
+                    data: JSON.stringify(model),
+                    contentType: 'application/json',
+                    success: function (result) {
+                        alert(result.message);
+                        window.location.href = '@Url.Action("Create", "Pedido")';
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Erro ao cadastrar o pedido:', error);
+                    }
+                });
+            });
+        });
+    </script>
+}

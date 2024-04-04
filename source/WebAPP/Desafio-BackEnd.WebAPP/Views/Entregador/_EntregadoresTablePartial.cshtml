@@ -1,0 +1,39 @@
+﻿@using Desafio_BackEnd.WebAPP.Models.Entregador
+@model List<EntregadorViewModel>
+
+@if (Model != null && Model.Count > 0)
+{
+    <table class="table">
+        <thead class="thead">
+            <tr>
+                <th style="display:none;">Id</th>
+                <th>Nome</th>
+                <th>Cnpj</th>
+                <th>DataNascimento</th>
+                <th>NumeroCNH</th>
+                <th>TipoCNH</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var entregador in Model)
+            {
+                <tr>
+                    <td style="display:none;">@entregador.Id</td>
+                    <td>@entregador.Nome</td>
+                    <td>@entregador.Cnpj</td>
+                    <td>@entregador.DataNascimento.ToString("dd/MM/yyyy")</td>
+                    <td>@entregador.NumeroCNH</td>
+                    <td>@entregador.TipoCNH</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteEntregador('@entregador.Id')">Excluir</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h3>Nenhum entregador encontrado...</h3>
+}

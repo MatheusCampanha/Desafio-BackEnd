@@ -1,0 +1,37 @@
+﻿@using Microsoft.AspNetCore.Http;
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="form_login">
+    <h1>Login</h1>
+
+    <form method="post" action="/Login/Login">
+        <div class="container">
+            <span for="username">Usuário:</span>
+            <input type="text" id="username" name="username" required>
+        </div>
+
+        <div class="container">
+            <span for="password">Senha:</span>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <div class="container_actions">
+            <button class="btn" type="submit">Entrar</button>
+            <a class="btn" href="/Login/Register">Registrar Novo Usuário</a>
+        </div>
+    </form>
+</div>
+
+@if (!string.IsNullOrEmpty(@Context.Request.Query["error"]))
+{
+    <div class="alert alert-danger">@Context.Request.Query["error"]</div>
+}
+
+@if (!string.IsNullOrEmpty(@Context.Request.Query["success"]))
+{
+    <script>
+        alert('Usuário cadastro com sucesso!');
+    </script>
+}
